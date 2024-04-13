@@ -1,0 +1,8 @@
+**.tofino/
+**/**.json
+**/**.ll
+*.txt
+*.pdf
+.VSCodeCounter/
+**.pp.cpp
+**__pycache__/
