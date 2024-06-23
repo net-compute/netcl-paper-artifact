@@ -2,7 +2,7 @@ NetCL Paper Artifact
 --------------------
 This repository contains artifacts to reproduce the experiments of the paper:
 
-> NetCL: A Unified Programming Framework for In-Network Computing, Supercomputing'24
+> NetCL: A Unified Programming Framework for In-Network Computing - Supercomputing 2024
 
 
 ## Usage
