@@ -13,7 +13,7 @@ DATA = {}
 
 PAPER_ORDER = lambda v: ["agg", "netcache", "paxos-acceptor", "paxos-learner", "paxos-leader", "calculator"].index(v)
 
-for program in sorted(os.listdir(INPUTS_DIR), PAPER_ORDER):
+for program in sorted(os.listdir(INPUTS_DIR), key=PAPER_ORDER):
     if program not in cc['ncc']['p4']:
         continue
     d = os.path.join(os.path.abspath(INPUTS_DIR), program)
