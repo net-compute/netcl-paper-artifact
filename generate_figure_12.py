@@ -11,9 +11,9 @@ INPUTS_DIR = 'programs'
 
 DATA = {}
 
-PAPER_ORDER = lambda v: ["agg", "netcache", "paxos-acceptor", "paxos-learner", "paxos-leader", "calculator"].index(v)
+PAPER_ORDER = ["agg", "netcache", "paxos-acceptor", "paxos-learner", "paxos-leader", "calculator"]
 
-for program in sorted(os.listdir(INPUTS_DIR), key=PAPER_ORDER):
+for program in sorted(os.listdir(INPUTS_DIR), key=lambda v: PAPER_ORDER.index(v) if v in PAPER_ORDER else len(PAPER_ORDER)):
     if program not in cc['ncc']['p4']:
         continue
     d = os.path.join(os.path.abspath(INPUTS_DIR), program)
