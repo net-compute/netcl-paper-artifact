@@ -8,12 +8,10 @@ import subprocess
 from util import remove_comments, cc
 
 INPUTS_DIR = 'programs'
-
+OUTFILE = "figure_12.pdf"
 DATA = {}
 
-PAPER_ORDER = ["agg", "netcache", "paxos-acceptor", "paxos-learner", "paxos-leader", "calculator"]
-
-for program in sorted(os.listdir(INPUTS_DIR), key=lambda v: PAPER_ORDER.index(v) if v in PAPER_ORDER else len(PAPER_ORDER)):
+for program in sorted(os.listdir(INPUTS_DIR)):
     if program not in cc['ncc']['p4']:
         continue
     d = os.path.join(os.path.abspath(INPUTS_DIR), program)
@@ -44,8 +42,9 @@ for program in sorted(os.listdir(INPUTS_DIR), key=lambda v: PAPER_ORDER.index(v)
     breakdown['other'] = breakdown['total'] - rel
     DATA[program] = breakdown
 
-DATA = dict(sorted(DATA.items()))
+PAPER_ORDER = ["agg", "netcache", "paxos-acceptor", "paxos-learner", "paxos-leader", "calculator"]
 
+DATA = dict(sorted(DATA.items(), key=lambda kv: PAPER_ORDER.index(kv[0]) if kv[0] in PAPER_ORDER else len(PAPER_ORDER)))
 
 bottom = np.zeros(len(DATA))
 bar_width = 0.3
@@ -101,7 +100,8 @@ plt.legend(labels=["Headers+Parsing", "Tables", "Actions", "Registers",
            "RegisterActions", "Logic", "Other", "Compute", "NetCL"], loc='upper center', bbox_to_anchor=(0.5, -0.15),
           fancybox=True, shadow=True, ncol=3)
 plt.tight_layout()
-plt.savefig("figure_12.pdf", format="pdf", bbox_inches="tight")
+plt.savefig(OUTFILE, format="pdf", bbox_inches="tight")
+print("file:", os.path.abspath(OUTFILE))
 
 if "--noshow" not in sys.argv:
     plt.show()
