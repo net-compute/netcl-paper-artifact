@@ -18,7 +18,7 @@ if not CLEANUP:
         print("error: NetCL compiler (nclang) not found")
         sys.exit(1)
     if P4C is None or not os.path.exists(P4C):
-        print("warning: P4 compiler (bf-p4c) not found. Skipping ...")
+        print(" \033[31m\u2718\033[0m P4 compiler (bf-p4c) not found. Skipping ...")
         P4C = None
 
 times = {}
@@ -84,8 +84,6 @@ if not CLEANUP:
     tot_times = [(times[k]['ncc'] + times[k]['p4c']) for k in times]
 
     print(fmt.format('ncc', *[("%.2f" % t) for t in ncc_times]))
-    print(fmt.format('p4c', *[("%.2f" % t) for t in p4c_times]))
+    print(fmt.format('p4c', *[("  --" if P4C is None else ("%.2f" % t)) for t in p4c_times]))
     print(fmt.format('tot', *[("%.2f" % t) for t in tot_times]))
     print(sep)
-
-
