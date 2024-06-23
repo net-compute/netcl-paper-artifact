@@ -101,7 +101,7 @@ plt.legend(labels=["Headers+Parsing", "Tables", "Actions", "Registers",
           fancybox=True, shadow=True, ncol=3)
 plt.tight_layout()
 plt.savefig(OUTFILE, format="pdf", bbox_inches="tight")
-print("file:", os.path.abspath(OUTFILE))
+print(" \033[32m\u2714\033[0m","figure written at", os.path.abspath(OUTFILE))
 
 if "--noshow" not in sys.argv:
     plt.show()
