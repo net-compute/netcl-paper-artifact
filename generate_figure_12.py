@@ -1,3 +1,4 @@
+import pprint
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -11,97 +12,223 @@ INPUTS_DIR = 'programs'
 OUTFILE = "figure_12.pdf"
 DATA = {}
 
-for program in sorted(os.listdir(INPUTS_DIR)):
-    if program not in cc['ncc']['p4']:
-        continue
-    d = os.path.join(os.path.abspath(INPUTS_DIR), program)
-    ncl_d = os.path.join(d, "ncl")
-    gen_d = os.path.join(d, "p4-gen")
-    brk_d = os.path.join(d, "p4-gen-breakdown")
+PAPER_ORDER = ["agg-orig", "agg-ours", "cache-orig", "cache-ours", "paxos-acc-orig", "paxos-acc-ours", "paxos-ldr-orig",
+               "paxos-ldr-ours", "paxos-lrn-orig", "paxos-lrn-ours" "calc-orig", "calc-ours"]
 
-    total = 0
-    breakdown = {'total': 0, 'ncl': 0, 'other': 0}
 
+def get_breakdown(program, ncl_d, full_d, brkd_d, breakdown):
     with open(os.path.join(ncl_d, "%s.cpp.loc.json" % program)) as f:
         breakdown['ncl'] = json.load(f)["C++"]["code"]
 
-    with open(os.path.join(gen_d, "%s.p4.loc.json" % program)) as f:
+    with open(os.path.join(full_d, "%s.p4.loc.json" % program)) as f:
         breakdown['total'] = json.load(f)["P4"]["code"]
 
     rel = 0
-    for f in os.listdir(brk_d):
-        path = os.path.join(brk_d, f)
+    for f in os.listdir(brkd_d):
+        path = os.path.join(brkd_d, f)
         with open(path) as bf:
-            cnt = len(bf.read().splitlines())
+            # cnt = len(bf.read().splitlines())
+            non_empty_lines = sum(1 for line in bf if line.strip())
             key = f.split('.')[0]
-            breakdown[key] = cnt
+            breakdown[key] = non_empty_lines
             if key == 'compute':
                 continue
-            rel += cnt
-
+            rel += non_empty_lines
     breakdown['other'] = breakdown['total'] - rel
+
+
+for program in sorted(os.listdir(INPUTS_DIR)):
+    if program not in PAPER_ORDER:
+        continue
+    program_path = os.path.join(INPUTS_DIR, program)
+
+    # breakdown = None
+
+    # if os.path.isdir(os.path.join(program_path, "p4-gen-breakdown")):
+    #     breakdown = "generated"
+    # elif os.path.isdir(os.path.join(program_path, "p4-breakdown")):
+    #     breakdown = "handwritten"
+    # else:
+    #     print(f"generate_figure_12: skipping '{program}'")
+    #     PAPER_ORDER.remove(program)
+    #     continue
+
+    d = os.path.join(os.path.abspath(INPUTS_DIR), program)
+    ncl_d = os.path.join(d, "ncl")
+
+    # if breakdown == 'generated':
+    #     full_d = os.path.join(d, "p4-gen")
+    #     brkd_d = os.path.join(d, "p4-gen-breakdown")
+    # else:
+    #     full_d = os.path.join(d, "p4")
+    #     brkd_d = os.path.join(d, "p4-breakdown")
+
+    breakdown = {'h': {'total': 0, 'ncl': 0, 'other': 0},
+                 'g': {'total': 0, 'ncl': 0, 'other': 0}}
+
+    if os.path.isdir(os.path.join(program_path, "p4-breakdown")):
+        full_d = os.path.join(d, "p4")
+        brkd_d = os.path.join(d, "p4-breakdown")
+        get_breakdown(program, ncl_d, full_d, brkd_d, breakdown['h'])
+    else:
+        print(f" \033[31m\u2718\033[0m no p4-breakdown for '{program}'")
+        breakdown['h'] = None
+    if os.path.isdir(os.path.join(program_path, "p4-gen-breakdown")):
+        full_d = os.path.join(d, "p4-gen")
+        brkd_d = os.path.join(d, "p4-gen-breakdown")
+        get_breakdown(program, ncl_d, full_d, brkd_d, breakdown['g'])
+    else:
+        print(f" \033[31m\u2718\033[0m no p4--gen0breakdown for '{program}'")
+        breakdown['g'] = None
+
     DATA[program] = breakdown
 
-PAPER_ORDER = ["agg", "netcache", "paxos-acceptor", "paxos-learner", "paxos-leader", "calculator"]
+    # total = 0
+    # breakdown = {'total': 0, 'ncl': 0, 'other': 0, 'kind': breakdown}
 
-DATA = dict(sorted(DATA.items(), key=lambda kv: PAPER_ORDER.index(kv[0]) if kv[0] in PAPER_ORDER else len(PAPER_ORDER)))
+    # with open(os.path.join(ncl_d, "%s.cpp.loc.json" % program)) as f:
+    #     breakdown['ncl'] = json.load(f)["C++"]["code"]
 
-bottom = np.zeros(len(DATA))
-bar_width = 0.3
-xlabels = [label.replace('-', '-\n') for label in DATA.keys()]
+    # with open(os.path.join(full_d, "%s.p4.loc.json" % program)) as f:
+    #     breakdown['total'] = json.load(f)["P4"]["code"]
 
+    # for f in os.listdir(brkd_d):
+    #     path = os.path.join(brkd_d, f)
+    #     with open(path) as bf:
+    #         cnt = len(bf.read().splitlines())
+    #         key = f.split('.')[0]
+    #         breakdown[key] = cnt
+    #         if key == 'compute':
+    #             continue
+    #         rel += cnt
+
+    # breakdown['other'] = breakdown['total'] - rel
+
+    # DATA[program] = breakdown
+
+
+DATA = dict(sorted(DATA.items(), key=lambda kv: PAPER_ORDER.index(
+    kv[0]) if kv[0] in PAPER_ORDER else len(PAPER_ORDER)))
+
+xlabels = []
+for p in DATA.keys():
+    name = p.replace('-', '-\n')
+    xlabels.append(name + '.g')
+    xlabels.append(name + '.h')
+
+plt.figure(figsize=(12, 6))
+
+# xlabels = [prog.replace('-', '-\n') for prog in DATA.keys()]
 plt.ylim((0, 101))
 plt.yticks(np.arange(0, 101, step=20))
 plt.ylabel("Percentage")
-plt.xticks(np.arange(len(DATA.keys())), labels=xlabels)
-plt.title("Breakdown of P4 LoC in the test programs",fontweight='bold')
+# plt.xticks(np.arange(len(xlabels)), labels=xlabels, rotation=85, ha='right', fontsize=10)
 
-x = np.arange(len(DATA.keys()))
-x_l = x - bar_width
-x_r = x + bar_width
+plt.title("Breakdown of P4 LoC in the test programs", fontweight='bold')
 
-d_headers_and_parsing = [
-    DATA[k]["headers_and_parsing"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_l, d_headers_and_parsing, width=bar_width)
-bottom += d_headers_and_parsing
 
-d_tables = [DATA[k]["tables"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_l, d_tables, bottom=bottom, color='limegreen', width=bar_width)
-bottom += d_tables
+n = len(xlabels)
+bar_width = 0.55
+group_width = bar_width * 3  # Total width of one group of bars
+x = np.arange(n) * (group_width + 0.5)
+# plt.xticks(np.arange(n) * (group_width + 0.5) + group_width / 3, labels=xlabels, rotation=85, ha='right', fontsize=10)
+plt.xticks(x, labels=xlabels, rotation=85, ha='right', fontsize=10)
 
-d_actions = [DATA[k]["actions"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_l, d_actions, bottom=bottom, color='forestgreen', width=bar_width)
-bottom += d_actions
 
-d_registers = [DATA[k]["regs"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_l, d_registers, bottom=bottom, color="pink", width=bar_width)
-bottom += d_registers
+# List of the keys to stack
+keys = ["headers_and_parsing", "tables", "actions",
+        "regs", "regactions", "logic", "other"]
 
-d_register_actions = [DATA[k]["regactions"] /
-                      DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_l, d_register_actions, bottom=bottom, color="red", width=bar_width)
-bottom += d_register_actions
+# Stack bars for g and h
+colors = ["blue", "limegreen", "forestgreen", "pink",
+          "red", "orange", "silver", "purple", "midnightblue"]
+bottom_g = np.zeros(len(xlabels) // 2)
+bottom_h = np.zeros(len(xlabels) // 2)
+legend_labels = []
+legend_patches = []
+for i, key in enumerate(keys):
+    d_g = [(DATA[p]['g'][key] / DATA[p]['g']['total'] * 100)
+           if DATA[p]['g'] is not None else 0 for p in DATA]
+    d_h = [(DATA[p]['h'][key] / DATA[p]['h']['total'] * 100)
+           if DATA[p]['h'] is not None else 0 for p in DATA]
+    plt.bar(x[::2] - bar_width, d_g, width=bar_width, bottom=bottom_g,
+            edgecolor='black', linewidth=.5, color=colors[i])
+    plt.bar(x[1::2] - bar_width, d_h, width=bar_width, bottom=bottom_h,
+            edgecolor='black', linewidth=.5, color=colors[i])
+    bottom_g += d_g
+    bottom_h += d_h
+    legend_labels.append(key)
+    legend_patches.append(plt.Line2D([0], [0], color=colors[i], lw=4))
 
-d_logic = [DATA[k]["logic"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_l, d_logic, bottom=bottom, color="orange", width=bar_width)
-bottom += d_logic
+# Plot compute and total separately
+d_compute_g = [(DATA[p]['g']["compute"] / DATA[p]['g']['total']
+                * 100) if DATA[p]['g'] is not None else 0 for p in DATA]
+d_compute_h = [(DATA[p]['h']["compute"] / DATA[p]['h']['total']
+                * 100) if DATA[p]['h'] is not None else 0 for p in DATA]
+plt.bar(x[::2], d_compute_g, width=bar_width,
+        linewidth=.5, edgecolor='black', color=colors[-2])
+plt.bar(x[1::2], d_compute_h, width=bar_width,
+        linewidth=.5, edgecolor='black', color=colors[-2])
 
-d_other = [DATA[k]["other"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_l, d_other, bottom=bottom, color="silver", width=bar_width)
-bottom += d_other
+d_ncl_g = [(DATA[p]['g']["ncl"] / DATA[p]['g']['total'] * 100) if DATA[p]
+           ['g'] is not None else 0 for p in DATA]  # Total is 100% for normalization
+d_ncl_h = [(DATA[p]['h']["ncl"] / DATA[p]['h']['total'] * 100) if DATA[p]
+           ['h'] is not None else 0 for p in DATA]  # Total is 100% for normalization
+plt.bar(x[::2] + bar_width, d_ncl_g, width=bar_width,
+        color='black', linewidth=1, fill=True)
+plt.bar(x[1::2] + bar_width, d_ncl_h, width=bar_width,
+        color='black', linewidth=1, fill=True)
 
-d_compute = [DATA[k]["compute"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x, d_compute, color="purple", width=bar_width)
-
-d_ncl = [DATA[k]["ncl"] / DATA[k]['total'] * 100 for k in DATA]
-plt.bar(x_r, d_ncl, color="midnightblue", width=bar_width)
-
-plt.legend(labels=["Headers+Parsing", "Tables", "Actions", "Registers",
-           "RegisterActions", "Logic", "Other", "Compute", "NetCL"], loc='upper center', bbox_to_anchor=(0.5, -0.15),
-          fancybox=True, shadow=True, ncol=3)
+plt.legend(legend_patches + [plt.Line2D([0], [0], color=colors[-2], lw=4), plt.Line2D([0], [0], color='black', lw=4)],
+           ['headers_and_parsing', 'tables', 'actions', 'regs', 'regactions', 'logic', 'other', 'compute', 'ncl'],
+           loc='upper center', bbox_to_anchor=(0.5, -0.4),
+           fancybox=True, shadow=True, ncol=3)
+# plt.legend(labels=legend_labels + ['compute', 'ncl'], loc='upper center', bbox_to_anchor=(0.5, -0.4),
+#           fancybox=True, shadow=True, ncol=3)
 plt.tight_layout()
 plt.savefig(OUTFILE, format="pdf", bbox_inches="tight")
-print(" \033[32m\u2714\033[0m","figure written at", os.path.abspath(OUTFILE))
+print(" \033[32m\u2714\033[0m", "figure written at", os.path.abspath(OUTFILE))
 
 if "--noshow" not in sys.argv:
     plt.show()
+
+
+# print also as a table to help transferring to the paper:
+headers = ["Program", "Headers+Parsing", "Tables", "Actions", "Registers",
+           "RegisterActions", "Logic", "Other", "Compute", "Total", "NetCL"]
+# Prepare rows
+
+# pprint.pprint(DATA)
+rows = []
+for prog, metrics in DATA.items():
+    for version in ['g', 'h']:
+        if metrics[version]:
+            rows.append([
+                prog + '.' + version.upper(),
+                metrics[version]['headers_and_parsing'],
+                metrics[version]['tables'],
+                metrics[version]['actions'],
+                metrics[version]['regs'],
+                metrics[version]['regactions'],
+                metrics[version]['logic'],
+                metrics[version]['other'],
+                metrics[version]['compute'],
+                metrics[version]['total'],
+                metrics[version]['ncl'],
+            ])
+
+# Define column widths
+col_widths = [max(len(str(item)) for item in col)
+              for col in zip(*([headers] + rows))]
+
+# Create a format string for each row
+format_str = ' | '.join('{{:<{}}}'.format(width) for width in col_widths)
+
+# Print the header
+print()
+print(format_str.format(*headers))
+print('-' * (sum(col_widths) + 3 * (len(headers) - 1)))
+
+# Print each row of data
+for row in rows:
+    print(format_str.format(*row))

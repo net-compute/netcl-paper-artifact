@@ -1,0 +1,13 @@
+Register<bit<32>, bit<32>>(CMS_SIZE) cms1;
+Register<bit<32>, bit<32>>(CMS_SIZE) cms2;
+Register<bit<32>, bit<32>>(CMS_SIZE) cms3;
+Register<bit<32>, bit<32>>(CMS_SIZE) cms4;
+Register<bit<8>, bit<32>>(BLF_SIZE) bf1;
+Register<bit<8>, bit<32>>(BLF_SIZE) bf2;
+Register<bit<8>, bit<32>>(BLF_SIZE) bf3;
+Register<pair<bit<8>>, bit<32>>(CACHE_LINES) Valid;
+Register<pair<bit<32>>, bit<32>>(CACHE_LINES) stats;
+Register<bit<32>, bit<32>>(CACHE_LINES) Cache1;
+Register<bit<32>, bit<32>>(CACHE_LINES) Cache2;
+Register<bit<32>, bit<32>>(CACHE_LINES) Cache3;
+Register<bit<32>, bit<32>>(CACHE_LINES) Cache4;

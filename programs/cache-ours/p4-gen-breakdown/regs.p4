@@ -1,0 +1,15 @@
+Register<bit<32>, bit<16>>(4096) _mem_Stats0;
+Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_2_;
+Register<bit<8>, bit<16>>(4096) _mem_Valid1;
+Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_1_;
+Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_3_;
+Register<bit<32>, bit<16>>(4096) _mem_Stats1;
+Register<bit<32>, bit<16>>(16384) _mem_c2;
+Register<bit<32>, bit<16>>(16384) _mem_c3;
+Register<bit<32>, bit<16>>(16384) _mem_c1;
+Register<bit<32>, bit<16>>(16384) _mem_c0;
+Register<bit<8>, bit<16>>(4096) _mem_Valid0;
+Register<bit<8>, bit<16>>(32768) _mem_b0;
+Register<bit<8>, bit<16>>(32768) _mem_b1;
+Register<bit<8>, bit<16>>(32768) _mem_b2;
+Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_0_;

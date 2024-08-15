@@ -13,12 +13,18 @@ if not os.path.exists(NCLANG):
 
 ir_kernel_prefix = "define dso_local void"
 ir_kernels = {
-               "agg": "@_Z9allreducejhtttRjPj",
-          "netcache": "@_Z5queryR4op_tmPjRjRbS2_b",
-        "calculator": "@_Z10calculator9operationjjRj",
-    "paxos-acceptor": "@_Z8acceptorR8msg_typeRjtRtRhPj",
-      "paxos-leader": "@_Z6leaderR8msg_typeRjtRtRhPj",
-     "paxos-learner": "@_Z7learnerR8msg_typeRjtRtRhPj"
+          "agg-orig": "@_Z9allreducejhtttRjPj",
+          "agg-ours": "@_Z9allreducejhtttRjPj",
+        "cache-orig": "@_Z5queryR4op_tmPjRjRbS2_b",
+        "cache-ours": "@_Z5queryR4op_tmPjRjRbS2_b",
+         "calc-orig": "@_Z10calculator9operationjjRj",
+         "calc-ours": "@_Z10calculator9operationjjRj",
+    "paxos-acc-orig": "@_Z8acceptorR8msg_typeRjtRtRhPj",
+    "paxos-acc-ours": "@_Z8acceptorR8msg_typeRjtRtRhPj",
+    "paxos-ldr-orig": "@_Z6leaderR8msg_typeRjtRtRhPj",
+    "paxos-ldr-ours": "@_Z6leaderR8msg_typeRjtRtRhPj",
+    "paxos-lrn-orig": "@_Z7learnerR8msg_typeRjtRtRhPj",
+    "paxos-lrn-ours": "@_Z7learnerR8msg_typeRjtRtRhPj"
 }
 
 
@@ -90,6 +96,11 @@ res = {}
 for program in os.listdir(INPUTS_DIR):
     if program not in cc['ncc']['p4'].keys():
         continue
+    program_path = os.path.join(INPUTS_DIR, program)
+    if not os.path.isdir(os.path.join(program_path, "p4-gen")):
+        print(f"generate_table_6: skipping '{program}'")
+        continue
+
     res[program] = {'ir': {'n': 0, 'bits': 0}, 'p4' : {'n': 0, 'bits': 0}}
 
     nc = os.path.join(os.path.abspath(INPUTS_DIR), program, "ncl","%s.cpp" % program)

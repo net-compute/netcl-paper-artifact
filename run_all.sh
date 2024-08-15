@@ -1,5 +1,10 @@
-export NCLANG="$HOME/nclang-0.1.0/build/bin/nclang"
-export P4C="$HOME/bf-sde-9.13.0/install/bin/bf-p4c"
+if [ -z "$NCLANG" ]; then
+  export NCLANG="$HOME/nclang-0.1.0/build/bin/nclang"
+fi
+
+if [ -z "$P4C" ]; then
+  export P4C="$HOME/bf-sde-9.13.0/install/bin/bf-p4c"
+fi
 
 set -e
 
@@ -35,7 +40,7 @@ echo
 
 echo "[+] Generating Figure 12..."
 startt=`date +%s`
-python3 generate_figure_12.py --noshow
+python3 generate_figure_12.py
 endt=`date +%s`
 echo "[+] took $((($endt - $startt) / 60))m$((($endt - $startt ) % 60))s"
 echo
