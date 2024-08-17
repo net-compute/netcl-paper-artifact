@@ -29,7 +29,7 @@ control UDPReceiver(
     inout ingress_intrinsic_metadata_for_deparser_t ig_dprsr_md,
     inout ingress_intrinsic_metadata_for_tm_t ig_tm_md) {
 
-    DirectCounter<counter_t>(CounterType_t.PACKETS_AND_BYTES) receive_counter;
+    // DirectCounter<counter_t>(CounterType_t.PACKETS_AND_BYTES) receive_counter;
 
     // Packet was received with errors; set drop bit in deparser metadata
     action drop() {

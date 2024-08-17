@@ -117,7 +117,7 @@ header switchml_h {
 // Exponent headers
 header exponents_h {
     exponent_t e0;
-    exponent_t e1;
+    // exponent_t e1;
 }
 
 // 128-byte data header
@@ -171,8 +171,8 @@ struct header_t {
     // ib_immediate_h ib_immediate;
     // Two 128-byte data headers to support harvesting 256 bytes with recirculation
     data_h         d0;
-    data_h         d1;
-    ib_icrc_h      ib_icrc;
+    // data_h         d1;
+    // ib_icrc_h      ib_icrc;
 }
 
 #endif /* _HEADERS_ */

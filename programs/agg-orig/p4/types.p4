@@ -47,10 +47,10 @@ enum bit<16> arp_opcode_t {
 }
 
 // ICMP-specific types
-enum bit<8> icmp_type_t {
-    ECHO_REPLY   = 0,
-    ECHO_REQUEST = 8
-}
+// enum bit<8> icmp_type_t {
+//     ECHO_REPLY   = 0,
+//     ECHO_REQUEST = 8
+// }
 
 // UDP-specific types;
 typedef bit<16> udp_port_t;
@@ -60,11 +60,11 @@ const udp_port_t UDP_PORT_SWITCHML_BASE = 0xbee0;
 const udp_port_t UDP_PORT_SWITCHML_MASK = 0xfff0;
 
 // IB/RoCE-specific types:
-typedef bit<128> ib_gid_t;
-typedef bit<24> sequence_number_t;
-typedef bit<24> queue_pair_t;
-typedef bit<32> rkey_t;
-typedef bit<64> addr_t;
+// typedef bit<128> ib_gid_t;
+// typedef bit<24> sequence_number_t;
+// typedef bit<24> queue_pair_t;
+// typedef bit<32> rkey_t;
+// typedef bit<64> addr_t;
 
 // // UC opcodes
 // enum bit<8> ib_opcode_t {
@@ -145,23 +145,23 @@ enum bit<4> packet_type_t {
     RETRANSMIT = 0x2,
     IGNORE     = 0x3,
     CONSUME0   = 0x4,
-    CONSUME1   = 0x5,
-    CONSUME2   = 0x6,
-    CONSUME3   = 0x7,
+    // CONSUME1   = 0x5,
+    // CONSUME2   = 0x6,
+    // CONSUME3   = 0x7,
     HARVEST0   = 0x8,
-    HARVEST1   = 0x9,
-    HARVEST2   = 0xa,
-    HARVEST3   = 0xb,
-    HARVEST4   = 0xc,
-    HARVEST5   = 0xd,
-    HARVEST6   = 0xe,
-    HARVEST7   = 0xf
+    // HARVEST1   = 0x9,
+    // HARVEST2   = 0xa,
+    // HARVEST3   = 0xb,
+    // HARVEST4   = 0xc,
+    // HARVEST5   = 0xd,
+    // HARVEST6   = 0xe,
+    // HARVEST7   = 0xf
 }
 
 // Port metadata, used for drop simulation
 struct port_metadata_t {
-    drop_probability_t ingress_drop_probability;
-    drop_probability_t egress_drop_probability;
+    // drop_probability_t ingress_drop_probability;
+    // drop_probability_t egress_drop_probability;
 }
 
 // SwitchML metadata header, bridged for recirculation and not exposed outside the switch
@@ -214,7 +214,7 @@ header switchml_md_h {
 
     // Exponents
     exponent_t e0;
-    exponent_t e1;
+    // exponent_t e1;
 
     // Message ID
     msg_id_t msg_id;
@@ -253,7 +253,7 @@ struct ingress_metadata_t {
 // Metadata for egress stage
 struct egress_metadata_t {
     switchml_md_h switchml_md;
-    switchml_rdma_md_h switchml_rdma_md;
+    // switchml_rdma_md_h switchml_rdma_md;
 
     // Checksum stuff
     bool checksum_err_ipv4;

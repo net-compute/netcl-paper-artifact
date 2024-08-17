@@ -69,15 +69,15 @@ control Exponents(
     }
 
     // Read second max register
-    RegisterAction<exponent_pair_t, pool_index_t, exponent_t>(exponents) read1_register_action = {
-        void apply(inout exponent_pair_t value, out exponent_t read_value) {
-            read_value = value.second;
-        }
-    };
+    // RegisterAction<exponent_pair_t, pool_index_t, exponent_t>(exponents) read1_register_action = {
+    //     void apply(inout exponent_pair_t value, out exponent_t read_value) {
+    //         read_value = value.second;
+    //     }
+    // };
 
-    action read1_action() {
-        max_exponent1 = read1_register_action.execute(ig_md.switchml_md.pool_index);
-    }
+    // action read1_action() {
+    //     max_exponent1 = read1_register_action.execute(ig_md.switchml_md.pool_index);
+    // }
 
     table exponent_max {
         key = {
@@ -89,7 +89,7 @@ control Exponents(
             write_read0_action;
             max_read0_action;
             read0_action;
-            read1_action;
+            // read1_action;
             @defaultonly NoAction;
         }
         size = 4;
@@ -104,7 +104,7 @@ control Exponents(
             // this is a retransmission, so just read first value
             (   _,    _, packet_type_t.CONSUME0) : read0_action();
             // if type is HARVEST7, read second value
-            (   _,    _, packet_type_t.HARVEST7) : read1_action();
+            // (   _,    _, packet_type_t.HARVEST7) : read1_action();
         }
         // If none of the above are true, do nothing.
         const default_action = NoAction;

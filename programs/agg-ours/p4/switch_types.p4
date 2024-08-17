@@ -160,6 +160,7 @@ struct allreduce_metadata {
 
 struct ingress_metadata_t {
   allreduce_metadata agg;
+  bool ip4_checksum_error;
 }
 
 struct egress_metadata_t { }

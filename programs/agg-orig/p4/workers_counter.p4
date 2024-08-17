@@ -85,27 +85,27 @@ control WorkersCounter(
             // Special case for single-worker jobs
             // if map_result is all 0's and type is CONSUME0, this is the first time we've seen this packet
             (1, 0, packet_type_t.CONSUME0) : single_worker_count_action();
-            (1, 0, packet_type_t.CONSUME1) : single_worker_count_action();
-            (1, 0, packet_type_t.CONSUME2) : single_worker_count_action();
-            (1, 0, packet_type_t.CONSUME3) : single_worker_count_action();
+            // (1, 0, packet_type_t.CONSUME1) : single_worker_count_action();
+            // (1, 0, packet_type_t.CONSUME2) : single_worker_count_action();
+            // (1, 0, packet_type_t.CONSUME3) : single_worker_count_action();
 
             // if we've seen this packet before, don't count, just read
             (1, _, packet_type_t.CONSUME0) : single_worker_read_action();
-            (1, _, packet_type_t.CONSUME1) : single_worker_read_action();
-            (1, _, packet_type_t.CONSUME2) : single_worker_read_action();
-            (1, _, packet_type_t.CONSUME3) : single_worker_read_action();
+            // (1, _, packet_type_t.CONSUME1) : single_worker_read_action();
+            // (1, _, packet_type_t.CONSUME2) : single_worker_read_action();
+            // (1, _, packet_type_t.CONSUME3) : single_worker_read_action();
 
             // Multi-worker jobs
             // if map_result is all 0's and type is CONSUME0, this is the first time we've seen this packet
             (_, 0, packet_type_t.CONSUME0) : count_workers_action();
-            (_, 0, packet_type_t.CONSUME1) : count_workers_action();
-            (_, 0, packet_type_t.CONSUME2) : count_workers_action();
-            (_, 0, packet_type_t.CONSUME3) : count_workers_action();
+            // (_, 0, packet_type_t.CONSUME1) : count_workers_action();
+            // (_, 0, packet_type_t.CONSUME2) : count_workers_action();
+            // (_, 0, packet_type_t.CONSUME3) : count_workers_action();
             // if map_result is not all 0's, don't count, just read
             (_, _, packet_type_t.CONSUME0) : read_count_workers_action();
-            (_, _, packet_type_t.CONSUME1) : read_count_workers_action();
-            (_, _, packet_type_t.CONSUME2) : read_count_workers_action();
-            (_, _, packet_type_t.CONSUME3) : read_count_workers_action();
+            // (_, _, packet_type_t.CONSUME1) : read_count_workers_action();
+            // (_, _, packet_type_t.CONSUME2) : read_count_workers_action();
+            // (_, _, packet_type_t.CONSUME3) : read_count_workers_action();
         }
         const default_action = NoAction;
     }

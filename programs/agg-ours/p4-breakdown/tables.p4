@@ -88,8 +88,13 @@ table next {
   }
 }
 table forwarding_table {
-  key = {H.eth.dst_addr: exact;}
-  actions = { send_to_port; flood; }
+  key = {
+    H.eth.dst_addr: exact;
+  }
+  actions = {
+      send_to_port;
+      flood;
+  }
   const default_action = flood;
   const size = FORWARDING_TABLE_CAPACITY;
 }

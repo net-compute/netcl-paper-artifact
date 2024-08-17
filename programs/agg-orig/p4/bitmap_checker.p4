@@ -103,9 +103,9 @@ control UpdateAndCheckWorkerBitmap(
         ig_md.switchml_md.packet_type = packet_type_t.IGNORE;
     }
 
-    action simulate_drop() {
-        drop();
-    }
+    // action simulate_drop() {
+    //     drop();
+    // }
 
     action check_worker_bitmap_action() {
         // Set map result to nonzero if this packet is a retransmission
@@ -132,7 +132,7 @@ control UpdateAndCheckWorkerBitmap(
             update_worker_bitmap_set0_action;
             update_worker_bitmap_set1_action;
             drop;
-            simulate_drop;
+            // simulate_drop;
             NoAction;
         }
         const entries = {
@@ -143,14 +143,14 @@ control UpdateAndCheckWorkerBitmap(
             (15w0 &&& 15w1, packet_type_t.CONSUME0,      _) : update_worker_bitmap_set0_action();
             (15w1 &&& 15w1, packet_type_t.CONSUME0,      _) : update_worker_bitmap_set1_action();
 
-            (15w0 &&& 15w1, packet_type_t.CONSUME1,      _) : update_worker_bitmap_set0_action();
-            (15w1 &&& 15w1, packet_type_t.CONSUME1,      _) : update_worker_bitmap_set1_action();
+            // (15w0 &&& 15w1, packet_type_t.CONSUME1,      _) : update_worker_bitmap_set0_action();
+            // (15w1 &&& 15w1, packet_type_t.CONSUME1,      _) : update_worker_bitmap_set1_action();
 
-            (15w0 &&& 15w1, packet_type_t.CONSUME2,      _) : update_worker_bitmap_set0_action();
-            (15w1 &&& 15w1, packet_type_t.CONSUME2,      _) : update_worker_bitmap_set1_action();
+            // (15w0 &&& 15w1, packet_type_t.CONSUME2,      _) : update_worker_bitmap_set0_action();
+            // (15w1 &&& 15w1, packet_type_t.CONSUME2,      _) : update_worker_bitmap_set1_action();
 
-            (15w0 &&& 15w1, packet_type_t.CONSUME3,      _) : update_worker_bitmap_set0_action();
-            (15w1 &&& 15w1, packet_type_t.CONSUME3,      _) : update_worker_bitmap_set1_action();
+            // (15w0 &&& 15w1, packet_type_t.CONSUME3,      _) : update_worker_bitmap_set0_action();
+            // (15w1 &&& 15w1, packet_type_t.CONSUME3,      _) : update_worker_bitmap_set1_action();
         }
         const default_action = NoAction;
     }

@@ -48,35 +48,35 @@ parser IngressParser(
         ig_md.port_metadata = port_metadata_unpack<port_metadata_t>(pkt);
 
         transition select(ig_intr_md.ingress_port) {
-            64: parse_recirculate; // pipe 0 CPU Eth port
-            68: parse_recirculate; // pipe 0 recirc port
+            // 64: parse_recirculate; // pipe 0 CPU Eth port
+            // 68: parse_recirculate; // pipe 0 recirc port
             320: parse_ethernet;   // pipe 2 CPU PCIe port
-            0x080 &&& 0x180: parse_recirculate; // all pipe 1 ports
-            0x100 &&& 0x180: parse_recirculate; // all pipe 2 ports
-            0x180 &&& 0x180: parse_recirculate; // all pipe 3 ports
+            // 0x080 &&& 0x180: parse_recirculate; // all pipe 1 ports
+            // 0x100 &&& 0x180: parse_recirculate; // all pipe 2 ports
+            // 0x180 &&& 0x180: parse_recirculate; // all pipe 3 ports
             default:  parse_ethernet;
         }
     }
 
-    state parse_recirculate {
-        // Parse switchml metadata
-        pkt.extract(ig_md.switchml_md);
-        pkt.extract(ig_md.switchml_rdma_md);
+    // state parse_recirculate {
+    //     // Parse switchml metadata
+    //     pkt.extract(ig_md.switchml_md);
+    //     pkt.extract(ig_md.switchml_rdma_md);
 
-        // Now parse the rest of the packet
-        transition select(ig_md.switchml_md.packet_type) {
-            (packet_type_t.CONSUME0) : parse_consume;
-            (packet_type_t.CONSUME1) : parse_consume;
-            (packet_type_t.CONSUME2) : parse_consume;
-            (packet_type_t.CONSUME3) : parse_consume;
-            default : parse_harvest; // default to parsing for harvests
-        }
-    }
+    //     // Now parse the rest of the packet
+    //     transition select(ig_md.switchml_md.packet_type) {
+    //         (packet_type_t.CONSUME0) : parse_consume;
+    //         (packet_type_t.CONSUME1) : parse_consume;
+    //         (packet_type_t.CONSUME2) : parse_consume;
+    //         (packet_type_t.CONSUME3) : parse_consume;
+    //         default : parse_harvest; // default to parsing for harvests
+    //     }
+    // }
 
     state parse_consume {
         // Extract the next 256B values
         pkt.extract(hdr.d0);
-        pkt.extract(hdr.d1);
+        // pkt.extract(hdr.d1);
         transition accept;
     }
 
@@ -192,19 +192,19 @@ parser IngressParser(
 
     state parse_values {
         pkt.extract(hdr.d0);
-        pkt.extract(hdr.d1);
+        // pkt.extract(hdr.d1);
         // At this point we know this is a SwitchML packet that wasn't recirculated,
         // so mark it for consumption
         ig_md.switchml_md.setValid();
         ig_md.switchml_md.packet_type = packet_type_t.CONSUME0;
-        ig_md.switchml_rdma_md.setValid();
+        // ig_md.switchml_rdma_md.setValid();
         transition accept;
     }
 
     state accept_regular {
         ig_md.switchml_md.setValid();
         ig_md.switchml_md.packet_type = packet_type_t.IGNORE;
-        ig_md.switchml_rdma_md.setValid();
+        // ig_md.switchml_rdma_md.setValid();
         transition accept;
     }
 }
@@ -234,7 +234,7 @@ control IngressDeparser(
         }
 
         pkt.emit(ig_md.switchml_md);
-        pkt.emit(ig_md.switchml_rdma_md);
+        // pkt.emit(ig_md.switchml_rdma_md);
         pkt.emit(hdr);
     }
 }

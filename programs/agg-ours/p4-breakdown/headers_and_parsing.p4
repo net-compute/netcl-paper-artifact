@@ -92,6 +92,8 @@ parser ingress_parser(packet_in P,
                       out ingress_metadata_t M,
                       out ingress_intrinsic_metadata_t IM)
 {
+  Checksum() ip4_checksum;
+
   state start {
     P.extract(IM);
     P.advance(PORT_METADATA_SIZE);
@@ -122,6 +124,8 @@ parser ingress_parser(packet_in P,
 
   state parse_ip4 {
     P.extract(H.ip4);
+    ip4_checksum.add(H.ip4);
+    M.ip4_checksum_error = ip4_checksum.verify();
     transition select(H.ip4.protocol) {
        IP_UDP : parse_udp;
       default : accept;

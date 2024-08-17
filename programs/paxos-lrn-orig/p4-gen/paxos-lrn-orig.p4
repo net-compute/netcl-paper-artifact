@@ -321,42 +321,42 @@ control MainIngressDeparser(packet_out P,
 control ncl_compute(inout headers H,
                     inout metadata M,
                     in ingress_intrinsic_metadata_t IM) {
-	bit<8> _tmp__16_or36;
-	bit<16> _tmp__12_icmp_conv_1_sub;
 	bit<8> _mem_lut__ZZ7learnerR8msg_typeRjtRtRhPjE8Majority_key = 0;
 	bit<16> call_i32;
-	bit<8> _lv__0_votes_0_reg2mem = 0;
 	bit<16> _tmp__2_icmp_conv_0_sub;
-	@name(".ncvm.mem.net.Value_fragment_7_")
-	@hidden
-	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_7_;
+	bit<8> _tmp__16_or36;
+	bit<8> _lv__0_votes_0_reg2mem = 0;
+	bit<16> _tmp__12_icmp_conv_1_sub;
 	@name(".ncvm.mem.net.Value_fragment_1_")
 	@hidden
 	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_1_;
-	@name(".ncvm.mem.net.Value_fragment_5_")
-	@hidden
-	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_5_;
-	@name(".ncvm.mem.net.Value_fragment_6_")
-	@hidden
-	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_6_;
-	@name(".ncvm.mem.net.Value_fragment_2_")
-	@hidden
-	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_2_;
-	@name(".ncvm.mem.net.Value_fragment_3_")
-	@hidden
-	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_3_;
 	@name(".ncvm.mem.net.Value_fragment_4_")
 	@hidden
 	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_4_;
+	@name(".ncvm.mem.net.Value_fragment_2_")
+	@hidden
+	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_2_;
+	@name(".ncvm.mem.net.Value_fragment_5_")
+	@hidden
+	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_5_;
+	@name(".ncvm.mem.net.Value_fragment_3_")
+	@hidden
+	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_3_;
 	@name(".ncvm.mem.net.Value_fragment_0_")
 	@hidden
 	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_0_;
 	@name(".ncvm.mem.net._ZZ7learnerR8msg_typeRjtRtRhPjE11VoteHistory")
 	@hidden
 	Register<bit<8>, bit<16>>(65536) _mem__ZZ7learnerR8msg_typeRjtRtRhPjE11VoteHistory;
+	@name(".ncvm.mem.net.Value_fragment_7_")
+	@hidden
+	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_7_;
 	@name(".ncvm.mem.net.Round")
 	@hidden
 	Register<bit<16>, bit<16>>(65536) _mem_Round;
+	@name(".ncvm.mem.net.Value_fragment_6_")
+	@hidden
+	Register<bit<32>, bit<16>>(65536) _mem_Value_fragment_6_;
 	RegisterAction<bit<16>, bit<16>, bit<16>>(_mem_Round) __ra__ncvm_atomic_max_u16_0_0_0_m_0_ = {
 		void apply(inout bit<16> R, out bit<16> O){
 			O = R;

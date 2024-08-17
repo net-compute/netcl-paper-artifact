@@ -50,18 +50,18 @@ control ARPandICMPResponder(
         send_back();
     }
 
-    action send_icmp_echo_reply(mac_addr_t switch_mac, ipv4_addr_t switch_ip) {
-        hdr.ethernet.dst_addr = hdr.ethernet.src_addr;
-        hdr.ethernet.src_addr = switch_mac;
+    // action send_icmp_echo_reply(mac_addr_t switch_mac, ipv4_addr_t switch_ip) {
+    //     hdr.ethernet.dst_addr = hdr.ethernet.src_addr;
+    //     hdr.ethernet.src_addr = switch_mac;
 
-        hdr.ipv4.dst_addr = hdr.ipv4.src_addr;
-        hdr.ipv4.src_addr = switch_ip;
+    //     hdr.ipv4.dst_addr = hdr.ipv4.src_addr;
+    //     hdr.ipv4.src_addr = switch_ip;
 
-        hdr.icmp.msg_type = icmp_type_t.ECHO_REPLY;
-        hdr.icmp.checksum = 0;
+    //     hdr.icmp.msg_type = icmp_type_t.ECHO_REPLY;
+    //     hdr.icmp.checksum = 0;
 
-        send_back();
-    }
+    //     send_back();
+    // }
 
     table arp_icmp {
         key = {
@@ -74,7 +74,7 @@ control ARPandICMPResponder(
         }
         actions = {
             send_arp_reply;
-            send_icmp_echo_reply;
+            // send_icmp_echo_reply;
         }
         size = 2;
     }

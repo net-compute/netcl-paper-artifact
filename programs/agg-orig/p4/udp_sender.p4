@@ -25,7 +25,7 @@ control UDPSender(
     in egress_intrinsic_metadata_t eg_intr_md,
     inout header_t hdr) {
 
-    DirectCounter<counter_t>(CounterType_t.PACKETS_AND_BYTES) send_counter;
+    // DirectCounter<counter_t>(CounterType_t.PACKETS_AND_BYTES) send_counter;
 
     // Read switch MAC and IP from table to form output packets
     action set_switch_mac_and_ip(mac_addr_t switch_mac, ipv4_addr_t switch_ip) {

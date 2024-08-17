@@ -114,18 +114,20 @@ control Ingress(
 
             // Store original ingress port to be used in retransmissions
             ig_md.switchml_md.ingress_port = ig_intr_md.ingress_port;
-        } else if (ig_md.switchml_md.packet_type == packet_type_t.CONSUME1 ||
-            ig_md.switchml_md.packet_type == packet_type_t.CONSUME2 ||
-            ig_md.switchml_md.packet_type == packet_type_t.CONSUME3) {
-            reconstruct_worker_bitmap.apply(ig_md);
         }
+        // else if (ig_md.switchml_md.packet_type == packet_type_t.CONSUME1 ||
+        //     ig_md.switchml_md.packet_type == packet_type_t.CONSUME2 ||
+        //     ig_md.switchml_md.packet_type == packet_type_t.CONSUME3) {
+        //     reconstruct_worker_bitmap.apply(ig_md);
+        // }
 
         // If the packet is valid, should be either forwarded or processed
         if (ig_dprsr_md.drop_ctl[0:0] == 1w0) {
-            if (ig_md.switchml_md.packet_type == packet_type_t.CONSUME0 ||
-                ig_md.switchml_md.packet_type == packet_type_t.CONSUME1 ||
-                ig_md.switchml_md.packet_type == packet_type_t.CONSUME2 ||
-                ig_md.switchml_md.packet_type == packet_type_t.CONSUME3) {
+            if (ig_md.switchml_md.packet_type == packet_type_t.CONSUME0)
+            //   || ig_md.switchml_md.packet_type == packet_type_t.CONSUME1
+            //   || ig_md.switchml_md.packet_type == packet_type_t.CONSUME2
+            //   || ig_md.switchml_md.packet_type == packet_type_t.CONSUME3) 
+            {
                 // For CONSUME packets, record packet reception and check if this packet is a retransmission
                 update_and_check_worker_bitmap.apply(hdr, ig_md, ig_intr_md, ig_dprsr_md, ig_tm_md);
 
@@ -200,7 +202,7 @@ control Egress(
     inout egress_intrinsic_metadata_for_deparser_t eg_intr_dprs_md,
     inout egress_intrinsic_metadata_for_output_port_t eg_intr_oport_md) {
 
-    RDMASender() rdma_sender;
+    // RDMASender() rdma_sender;
     UDPSender() udp_sender;
 
     apply {
@@ -219,11 +221,11 @@ control Egress(
                 eg_md.switchml_md.worker_id = eg_intr_md.egress_rid;
             }
 
-            if (eg_md.switchml_md.worker_type == worker_type_t.ROCEv2) {
-                rdma_sender.apply(hdr, eg_md, eg_intr_md, eg_intr_md_from_prsr, eg_intr_dprs_md);
-            } else {
+            // if (eg_md.switchml_md.worker_type == worker_type_t.ROCEv2) {
+            //     rdma_sender.apply(hdr, eg_md, eg_intr_md, eg_intr_md_from_prsr, eg_intr_dprs_md);
+            // } else {
                 udp_sender.apply(eg_md, eg_intr_md, hdr);
-            }
+            // }
         }
     }
 }
