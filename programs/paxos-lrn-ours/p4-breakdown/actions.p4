@@ -1,32 +1,28 @@
-action get_acptid(bit<8> id) {
-  acptid = id;
+action get_vote(bit<8> v) {
+  vote = v;
 }
-action write_value_1() {
-  registerValue1.write(hdr.paxos.inst, hdr.paxos.paxosval1);
+action value_1_write() {
+  write_value_1.execute(hdr.paxos.inst);
 }
-action write_value_2() {
-  registerValue2.write(hdr.paxos.inst, hdr.paxos.paxosval2);
+action value_2_write() {
+  write_value_2.execute(hdr.paxos.inst);
 }
-action write_value_3() {
-  registerValue3.write(hdr.paxos.inst, hdr.paxos.paxosval3);
+action value_3_write() {
+  write_value_3.execute(hdr.paxos.inst);
 }
-action write_value_4() {
-  registerValue4.write(hdr.paxos.inst, hdr.paxos.paxosval4);
+action value_4_write() {
+  write_value_4.execute(hdr.paxos.inst);
 }
-action write_value_5() {
-  registerValue5.write(hdr.paxos.inst, hdr.paxos.paxosval5);
+action value_5_write() {
+  write_value_5.execute(hdr.paxos.inst);
+action value_6_write() {
+  write_value_6.execute(hdr.paxos.inst);
 }
-action write_value_6() {
-  registerValue6.write(hdr.paxos.inst, hdr.paxos.paxosval6);
+action value_7_write() {
+  write_value_7.execute(hdr.paxos.inst);
 }
-action write_value_7() {
-  registerValue7.write(hdr.paxos.inst, hdr.paxos.paxosval7);
-}
-action write_value_8() {
-  registerValue8.write(hdr.paxos.inst, hdr.paxos.paxosval8);
-}
-action update_round() {
-  registerRound.write(hdr.paxos.inst, hdr.paxos.rnd);
+action value_8_write() {
+  write_value_8.execute(hdr.paxos.inst);
 }
 action update_history_action() {
   meta.paxos_metadata.ack_acceptors = update_history.execute(hdr.paxos.inst);
@@ -41,6 +37,9 @@ action forward(PortId port, bit<16> learnerPort) {
   tim.ucast_egress_port = port;
   hdr.udp.dstPort = learnerPort;
 }
-action get_round_check() {
-  round_check = (meta.paxos_metadata.old_round - hdr.paxos.rnd);
+action round_is_valid() {
+  round_valid = 1;
+}
+action round_is_invalid() {
+  round_valid = 0;
 }

@@ -50,7 +50,7 @@ for program in os.listdir(INPUTS_DIR):
         ncl_pp_loc = count_loc(program, "ncl", ext['ncl_pp'], "C++")
         reduction = p4_loc / ncl_loc if ncl_loc > 0 else 0
         reduction_pp = p4_pp_loc / ncl_loc if ncl_loc > 0 else 0
-        p4_gen_loc = count_loc(program, "p4-gen", ext['p4_gen'], "P4") if not program.endswith('-one') else 0
+        p4_gen_loc = count_loc(program, "p4-gen", ext['p4_gen'], "P4") if not "--combined--" in program else 0
     else:
         ncl_loc = 0
         ncl_pp_loc = 0

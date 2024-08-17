@@ -4,9 +4,6 @@ _box_h<bit<16>>[1] ncp_data_1_2;
 _box_h<bit<16>>[1] ncp_data_1_3;
 _box_h<bit<8>>[1] ncp_data_1_4;
 _box_h<bit<32>>[8] ncp_data_1_5;
-action ncvm_swi_tbl_0_action_0() { }
-action ncvm_swi_tbl_0_action_1() { }
-action ncvm_swi_tbl_0_action_default() { }
 bit<8> _lv__0_ncvm_scf_pred_var_0 = 0;
 Register<bit<32>, bit<8>>(1) _mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance;
 bit<32> ncvm_swi_tbl_key_0;

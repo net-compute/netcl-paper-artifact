@@ -1,25 +1,32 @@
 apply {
   if (hdr.ipv4.isValid()) {
+
     if (hdr.paxos.isValid()) {
 
-      acptid = (bit<8>) hdr.paxos.acptid;
-      get_acptid_tbl.apply();
+      meta.paxos_metadata.set_drop = 1;
 
-      meta.paxos_metadata.old_round = read_old_round_and_write_max.execute(hdr.paxos.inst);
+      round_old = read_old_round_and_write_max.execute(hdr.paxos.inst);
+      round_dif = round_old - hdr.paxos.rnd;
+      round_check_tbl.apply();
 
-      get_round_check();
-      if ((round_check[ROUND_SIZE - 1: ROUND_SIZE - 1] == 1) || (round_check == 0)) {
-        write_value_1();
-        write_value_2();
-        write_value_3();
-        write_value_4();
-        write_value_5();
-        write_value_6();
-        write_value_7();
-        write_value_8();
+      if (round_valid == 1) {
+
+        meta.paxos_metadata.set_drop = 0;
+
+        // In both cases we read the value
+        value_1_write();
+        value_2_write();
+        value_3_write();
+        value_4_write();
+        value_5_write();
+        value_6_write();
+        value_7_write();
+        value_8_write();
+
+        vote_tbl.apply();
+
+        history_tbl.apply();
       }
-
-      history_tbl.apply();
 
       // TODO: replace this with counting number of 1 in Binary
       // e.g count_number_of_1_binary(paxos_metadata.acceptors) == MAJORITY

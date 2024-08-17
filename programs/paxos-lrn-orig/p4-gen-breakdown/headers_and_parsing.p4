@@ -10,6 +10,12 @@ header arp_h {
 	bit<8> proto_addr_len;
 	arp_opcode_t opcode;
 }
+header arp_ip4_h {
+	mac_addr_t src_hw_addr;
+	ip4_addr_t src_proto_addr;
+	mac_addr_t dst_hw_addr;
+	ip4_addr_t dst_proto_addr;
+}
 header ipv4_h {
 	bit<4> version;
 	bit<4> ihl;

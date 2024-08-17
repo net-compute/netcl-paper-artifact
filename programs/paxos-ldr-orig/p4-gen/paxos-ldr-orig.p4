@@ -335,8 +335,8 @@ control ncl_compute(inout headers H,
 		const default_action = ncvm_swi_tbl_0_action_default();
 		const size = 2;
 		const entries = {
-			32 : ncvm_swi_tbl_0_action_0;
-			16 : ncvm_swi_tbl_0_action_1;
+			16 : ncvm_swi_tbl_0_action_0;
+			32 : ncvm_swi_tbl_0_action_1;
 		}
 	}
 	RegisterAction<bit<32>, bit<8>, bit<32>>(_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance) __ra__ncvm_atomic_write_u32_0_0_0_e_0_ = {
@@ -358,14 +358,14 @@ control ncl_compute(inout headers H,
 		switch (ncvm_swi_tbl_0.apply().action_run) {
 			ncvm_swi_tbl_0_action_default : { _lv__0_ncvm_scf_pred_var_0 = 0; }
 			ncvm_swi_tbl_0_action_1 : {
+				mem_rmw_0_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance(0);
+				_lv__0_ncvm_scf_pred_var_0 = 0;
+			}
+			ncvm_swi_tbl_0_action_0 : {
 				H.ncp_data_1_0[0].value = 4;
 				mem_rmw_o_0_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance(H.ncp_data_1_1[0].value, 0);
 				ncvm_action_multicast(M, 11);
 				_lv__0_ncvm_scf_pred_var_0 = 1;
-			}
-			ncvm_swi_tbl_0_action_0 : {
-				mem_rmw_0_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance(0);
-				_lv__0_ncvm_scf_pred_var_0 = 0;
 			}
 		}
 		if ((_lv__0_ncvm_scf_pred_var_0 == 0)) {

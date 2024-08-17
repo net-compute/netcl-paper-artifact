@@ -26,9 +26,7 @@ header paxos_t {
   bit<32>             paxosval8;
 }
 struct paxos_metadata_t {
-  bit<ROUND_SIZE> old_round;
   bit<1> set_drop;
-  bit<8> ack_count;
   bit<8> ack_acceptors;
 }
 struct metadata {

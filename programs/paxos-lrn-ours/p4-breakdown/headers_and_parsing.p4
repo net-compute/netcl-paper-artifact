@@ -3,7 +3,6 @@ header ethernet_t {
   EthernetAddress srcAddr;
   bit<16> etherType;
 }
-
 header ipv4_t {
   bit<4> version;
   bit<4> ihl;
@@ -18,14 +17,12 @@ header ipv4_t {
   IPv4Address srcAddr;
   IPv4Address dstAddr;
 }
-
 header udp_t {
   bit<16> srcPort;
   bit<16> dstPort;
   bit<16> length_;
   bit<16> checksum;
 }
-
 header paxos_t {
   bit<MSGTYPE_SIZE>   msgtype;    // indicates the message type e.g., 1A, 1B, etc.
   bit<INSTANCE_SIZE>  inst;       // instance number
@@ -42,14 +39,12 @@ header paxos_t {
   bit<32>             paxosval7;
   bit<32>             paxosval8;
 }
-
 struct headers {
   ethernet_t ethernet;
   ipv4_t ipv4;
   udp_t udp;
   paxos_t paxos;
 }
-
 parser ingress_parser(packet_in b,
                       out headers p,
                       out metadata meta,
@@ -93,7 +88,6 @@ parser ingress_parser(packet_in b,
     transition accept;
   }
 }
-
 control ingress_deparser( packet_out packet,
                           inout headers hdr,
                           in metadata m,
@@ -105,7 +99,6 @@ control ingress_deparser( packet_out packet,
     packet.emit(hdr.paxos);
   }
 }
-
 parser egress_parser(packet_in b, out headers p,
                       out metadata meta,
                       out egress_intrinsic_metadata_t im) {
@@ -143,7 +136,6 @@ parser egress_parser(packet_in b, out headers p,
     transition accept;
   }
 }
-
 control egress_deparser (packet_out packet,
                          inout headers hdr,
                          in metadata meta,

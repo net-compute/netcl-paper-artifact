@@ -23,29 +23,12 @@ header udp_t {
   bit<16> length_;
   bit<16> checksum;
 }
-header paxos_t {
-  bit<MSGTYPE_SIZE>   msgtype;    // indicates the message type e.g., 1A, 1B, etc.
-  bit<INSTANCE_SIZE>  inst;       // instance number
-  bit<ROUND_SIZE>     rnd;        // round number
-  bit<ROUND_SIZE>     vrnd;       // round in which an acceptor casted a vote
-  bit<DATAPATH_SIZE>  acptid;     // Switch ID
-  bit<VALUELEN_SIZE>  paxoslen;   // the length of paxos_value
-  bit<32>             paxosval1;
-  bit<32>             paxosval2;
-  bit<32>             paxosval3;
-  bit<32>             paxosval4;
-  bit<32>             paxosval5;
-  bit<32>             paxosval6;
-  bit<32>             paxosval7;
-  bit<32>             paxosval8;
-}
 struct headers {
   ethernet_t ethernet;
   ipv4_t ipv4;
   udp_t udp;
   paxos_t paxos;
 }
-
 parser ingress_parser(packet_in b,
                       out headers p,
                       out metadata meta,
@@ -89,7 +72,6 @@ parser ingress_parser(packet_in b,
     transition accept;
   }
 }
-
 control ingress_deparser( packet_out packet,
                           inout headers hdr,
                           in metadata m,
@@ -101,7 +83,6 @@ control ingress_deparser( packet_out packet,
     packet.emit(hdr.paxos);
   }
 }
-
 parser egress_parser(packet_in b, out headers p,
                       out metadata meta,
                       out egress_intrinsic_metadata_t im) {
@@ -139,7 +120,6 @@ parser egress_parser(packet_in b, out headers p,
     transition accept;
   }
 }
-
 control egress_deparser (packet_out packet,
                          inout headers hdr,
                          in metadata meta,

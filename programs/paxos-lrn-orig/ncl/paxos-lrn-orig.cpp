@@ -1,5 +1,5 @@
 #define PAXOS 1
-#define LEARNER 5
+#define LEARNERS 5
 
 using namespace ncl;
 
@@ -12,20 +12,18 @@ enum msg_type {
   PAXOS_RST = 1 << 5, // Reset paxos
 };
 
-_at(LEARNER) _net_ uint32_t Value[8][65536];
-_at(LEARNER) _net_ uint16_t Round[65536];
+_at(LEARNERS) _net_ uint32_t Value[8][65536];
+_at(LEARNERS) _net_ uint16_t Round[65536];
 
 /// Paxos learner kernel. Receive votes, deliver value when majority
-_at(LEARNER) _kernel(PAXOS) void learner(msg_type &type, uint32_t &instance,
+_at(LEARNERS) _kernel(PAXOS) void learner(msg_type &type, uint32_t &instance,
                                          uint16_t round, uint16_t &vote_round,
                                          uint8_t &vote, uint32_t val[8]) {
   static uint8_t VoteHistory[65536];
   static const _lookup_ uint8_t Majority[] = {0b011, 0b101, 0b110, 0b111};
 
   if (type == PAXOS_2B) {
-    auto prev_round = atomic_cmp_write_lte(&Round[instance], round, round);
-
-    uint8_t votes;
+    auto prev_round = atomic_max(&Round[instance], round);
 
     if (round < prev_round)
       return _drop(); // lower round => drop
@@ -33,13 +31,13 @@ _at(LEARNER) _kernel(PAXOS) void learner(msg_type &type, uint32_t &instance,
     for (auto i = 0; i < 8; ++i)
       Value[i][instance] = val[i];
 
-    if (round > prev_round)
+    uint8_t votes;
+    if (round > prev_round) {
       votes = atomic_write(&VoteHistory[instance], vote);
-    else
+    } else {
       votes = atomic_or(&VoteHistory[instance], vote);
+    }
 
-    if (votes & vote)
-      return _drop();
     if (!lookup(Majority, votes | vote))
       return _drop();
   }

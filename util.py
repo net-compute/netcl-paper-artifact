@@ -25,8 +25,8 @@ cc = {
             "paxos-ldr-ours": "-ncc -x ncl -ncl-is-device -ncl-target tna -ncl-device-id 4 -emit-llvm",
             "paxos-lrn-orig": "-ncc -x ncl -ncl-is-device -ncl-target tna -ncl-device-id 5 -emit-llvm",
             "paxos-lrn-ours": "-ncc -x ncl -ncl-is-device -ncl-target tna -ncl-device-id 5 -emit-llvm",
-            "paxos-one-orig": "-ncc -x ncl -ncl-is-device -ncl-target tna -ncl-device-id 1 -emit-llvm",
-            "paxos-one-ours": "-ncc -x ncl -ncl-is-device -ncl-target tna -ncl-device-id 1 -emit-llvm",
+     "paxos--combined--orig": "-ncc -x ncl -ncl-is-device -ncl-target tna -ncl-device-id 1 -emit-llvm",
+     "paxos--combined--ours": "-ncc -x ncl -ncl-is-device -ncl-target tna -ncl-device-id 1 -emit-llvm",
         },
         'p4' : {
                 # --p4-no-switch-statements => Intel's compiler only supports switching on table.action_run

@@ -1,7 +1,7 @@
-#define PAXOS_1A 0 
-#define PAXOS_1B 1 
+#define PAXOS_1A 0
+#define PAXOS_1B 1
 #define PAXOS_2A 2
-#define PAXOS_2B 3 
+#define PAXOS_2B 3
 #define MSGTYPE_SIZE    16
 #define INSTANCE_SIZE   32
 #define ROUND_SIZE      16
@@ -26,9 +26,7 @@ header paxos_t {
   bit<32>             paxosval8;
 }
 struct paxos_metadata_t {
-  bit<ROUND_SIZE> old_round;
   bit<1> set_drop;
-  bit<8> ack_count;
   bit<8> ack_acceptors;
 }
 struct metadata {
@@ -44,6 +42,19 @@ control ingress( inout headers hdr,
   Register<bit<DATAPATH_SIZE>, bit<1>>(1) registerAcceptorID;
   Register<bit<ROUND_SIZE>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerVRound;
 
+  // ROUND
+  bit<ROUND_SIZE> round_old = 0;
+  bit<ROUND_SIZE> current_round = 0;
+  bit<1> round_valid = 0;
+  Register<bit<ROUND_SIZE>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerRound;
+  RegisterAction<bit<ROUND_SIZE>, bit<INSTANCE_SIZE>, bit<ROUND_SIZE>>(registerRound) compute_and_get_max_round = {
+    void apply(inout bit<ROUND_SIZE> reg, out bit<ROUND_SIZE> ret) {
+      reg = max(hdr.paxos.rnd, reg);
+      ret = reg;
+    }
+  };
+
+
   // VALUE
   Register<bit<32>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerValue1;
   Register<bit<32>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerValue2;
@@ -53,126 +64,293 @@ control ingress( inout headers hdr,
   Register<bit<32>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerValue6;
   Register<bit<32>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerValue7;
   Register<bit<32>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerValue8;
-
-  bool read_value = false;
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue1) value_1_read_or_write = {
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue1) read_value_1 = {
     void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval1;
-        ret = reg;
-      }
-    }
-  };
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue2) value_2_read_or_write = {
-    void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval2;
-        ret = reg;
-      }
-    }
-  };
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue3) value_3_read_or_write = {
-    void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval3;
-        ret = reg;
-      }
-    }
-  };
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue4) value_4_read_or_write = {
-    void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval4;
-        ret = reg;
-      }
-    }
-  };
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue5) value_5_read_or_write = {
-    void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval5;
-        ret = reg;
-      }
-    }
-  };
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue6) value_6_read_or_write = {
-    void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval6;
-        ret = reg;
-      }
-    }
-  };
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue7) value_7_read_or_write = {
-    void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval7;
-        ret = reg;
-      }
-    }
-  };
-  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue8) value_8_read_or_write = {
-    void apply(inout bit<32> reg, out bit<32> ret) {
-      if (read_value) {
-        ret = reg;
-      } else {
-        reg = hdr.paxos.paxosval8;
-        ret = reg;
-      }
-    }
-  };
-
-  // ROUND
-  Register<bit<ROUND_SIZE>, bit<INSTANCE_SIZE>>(INSTANCE_COUNT) registerRound;
-  RegisterAction<bit<ROUND_SIZE>, bit<INSTANCE_SIZE>, bit<ROUND_SIZE>>(registerRound) read_old_round_and_write_max = {
-    void apply(inout bit<ROUND_SIZE> reg, out bit<ROUND_SIZE> ret) {
       ret = reg;
-      reg = max(hdr.paxos.rnd, reg);
     }
   };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue2) read_value_2 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      ret = reg;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue3) read_value_3 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      ret = reg;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue4) read_value_4 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      ret = reg;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue5) read_value_5 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      ret = reg;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue6) read_value_6 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      ret = reg;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue7) read_value_7 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      ret = reg;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue8) read_value_8 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      ret = reg;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue1) write_value_1 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval1;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue2) write_value_2 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval2;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue3) write_value_3 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval3;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue4) write_value_4 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval4;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue5) write_value_5 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval5;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue6) write_value_6 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval6;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue7) write_value_7 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval7;
+    }
+  };
+  RegisterAction<bit<32>, bit<INSTANCE_SIZE>, bit<32>>(registerValue8) write_value_8 = {
+    void apply(inout bit<32> reg, out bit<32> ret) {
+      reg = hdr.paxos.paxosval8;
+    }
+  };
+  action value_1_read() {
+    hdr.paxos.paxosval1 = read_value_1.execute(hdr.paxos.inst);
+  }
+  action value_2_read() {
+    hdr.paxos.paxosval2 = read_value_2.execute(hdr.paxos.inst);
+  }
+  action value_3_read() {
+    hdr.paxos.paxosval3 = read_value_3.execute(hdr.paxos.inst);
+  }
+  action value_4_read() {
+    hdr.paxos.paxosval4 = read_value_4.execute(hdr.paxos.inst);
+  }
+  action value_5_read() {
+    hdr.paxos.paxosval5 = read_value_5.execute(hdr.paxos.inst);
+  }
+  action value_6_read() {
+    hdr.paxos.paxosval6 = read_value_6.execute(hdr.paxos.inst);
+  }
+  action value_7_read() {
+    hdr.paxos.paxosval7 = read_value_7.execute(hdr.paxos.inst);
+  }
+  action value_8_read() {
+    hdr.paxos.paxosval8 = read_value_8.execute(hdr.paxos.inst);
+  }
+  action value_1_write() {
+    hdr.paxos.paxosval1 = write_value_1.execute(hdr.paxos.inst);
+  }
+  action value_2_write() {
+    hdr.paxos.paxosval2 = write_value_2.execute(hdr.paxos.inst);
+  }
+  action value_3_write() {
+    hdr.paxos.paxosval3 = write_value_3.execute(hdr.paxos.inst);
+  }
+  action value_4_write() {
+    hdr.paxos.paxosval4 = write_value_4.execute(hdr.paxos.inst);
+  }
+  action value_5_write() {
+    hdr.paxos.paxosval5 = write_value_5.execute(hdr.paxos.inst);
+  }
+  action value_6_write() {
+    hdr.paxos.paxosval6 = write_value_6.execute(hdr.paxos.inst);
+  }
+  action value_7_write() {
+    hdr.paxos.paxosval7 = write_value_7.execute(hdr.paxos.inst);
+  }
+  action value_8_write() {
+    hdr.paxos.paxosval8 = write_value_8.execute(hdr.paxos.inst);
+  }
+  table read_or_write_value_1 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_1_read;
+      value_1_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_1_read();
+      PAXOS_2A  : value_1_write();
+    }
+  }
+  table read_or_write_value_2 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_2_read;
+      value_2_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_2_read();
+      PAXOS_2A  : value_2_write();
+    }
+  }
+  table read_or_write_value_3 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_3_read;
+      value_3_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_3_read();
+      PAXOS_2A  : value_3_write();
+    }
+  }
+  table read_or_write_value_4 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_4_read;
+      value_4_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_4_read();
+      PAXOS_2A  : value_4_write();
+    }
+  }
+  table read_or_write_value_5 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_5_read;
+      value_5_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_5_read();
+      PAXOS_2A  : value_5_write();
+    }
+  }
+  table read_or_write_value_6 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_6_read;
+      value_6_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_6_read();
+      PAXOS_2A  : value_6_write();
+    }
+  }
+  table read_or_write_value_7 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_7_read;
+      value_7_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_7_read();
+      PAXOS_2A  : value_7_write();
+    }
+  }
+  table read_or_write_value_8 {
+    key = {
+      hdr.paxos.msgtype: exact;
+    }
+    actions = {
+      value_8_read;
+      value_8_write;
+      NoAction;
+    }
+    default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A  : value_8_read();
+      PAXOS_2A  : value_8_write();
+    }
+  }
 
   action _drop() {
+    meta.paxos_metadata.set_drop = 1;
     dim.drop_ctl[0:0] = 1;
   }
 
   action handle_1a() {
     hdr.paxos.msgtype = PAXOS_1B;
     hdr.paxos.vrnd = registerVRound.read(hdr.paxos.inst);
-    registerRound.write(hdr.paxos.inst, hdr.paxos.rnd);
     meta.paxos_metadata.set_drop = 0;
-    read_value = true;
   }
 
   action handle_2a() {
     hdr.paxos.msgtype = PAXOS_2B;
     registerVRound.write(hdr.paxos.inst, hdr.paxos.rnd);
-    registerRound.write(hdr.paxos.inst, hdr.paxos.rnd);
     meta.paxos_metadata.set_drop = 0;
   }
 
   table acceptor_tbl {
-    key = {hdr.paxos.msgtype : exact;}
+    key = { hdr.paxos.msgtype : exact; }
     actions = {
       handle_1a;
       handle_2a;
       _drop;
     }
-    size = 4;
+    size = 2;
     default_action = _drop();
+    const entries = {
+      PAXOS_1A : handle_1a();
+      PAXOS_2A : handle_2a();
+    }
   }
 
   action forward(PortId port, bit<16> learnerPort) {
@@ -190,28 +368,48 @@ control ingress( inout headers hdr,
     default_action =  _drop();
   }
 
-  bit<ROUND_SIZE> round_check = 0;
-  action check_for_larger_round() {
-    round_check = (meta.paxos_metadata.old_round - hdr.paxos.rnd);
+  action read_round() {
+    current_round = compute_and_get_max_round.execute(hdr.paxos.inst);
+  }
+
+  // if its a valid packet, compute max of register and incoming round,
+  // write the result back to the register, and store it at current_round
+  table round_tbl {
+    key = { hdr.paxos.msgtype: exact; }
+    actions = { read_round; NoAction; }
+    const default_action = NoAction;
+    const size = 2;
+    const entries = {
+      PAXOS_1A: read_round();
+      PAXOS_2A: read_round();
+    }
   }
 
   apply {
     if (hdr.ipv4.isValid()) {
       if (meta.ipv4_checksum_error) {
+
         _drop();
+
       } else if (hdr.paxos.isValid()) {
-        meta.paxos_metadata.old_round = read_old_round_and_write_max.execute(hdr.paxos.inst);
-        if (round_check[ROUND_SIZE - 1: ROUND_SIZE - 1] == 1) {
-          if ( acceptor_tbl.apply().hit ) {
-            value_1_read_or_write.execute(hdr.paxos.inst);
-            value_2_read_or_write.execute(hdr.paxos.inst);
-            value_3_read_or_write.execute(hdr.paxos.inst);
-            value_4_read_or_write.execute(hdr.paxos.inst);
-            value_5_read_or_write.execute(hdr.paxos.inst);
-            value_6_read_or_write.execute(hdr.paxos.inst);
-            value_7_read_or_write.execute(hdr.paxos.inst);
-            value_8_read_or_write.execute(hdr.paxos.inst);
-          }
+
+        meta.paxos_metadata.set_drop = 1;
+
+        if (round_tbl.apply().hit) {
+
+
+          acceptor_tbl.apply();
+          hdr.paxos.acptid = registerAcceptorID.read(0);
+
+          read_or_write_value_1.apply();
+          read_or_write_value_2.apply();
+          read_or_write_value_3.apply();
+          read_or_write_value_4.apply();
+          read_or_write_value_5.apply();
+          read_or_write_value_6.apply();
+          read_or_write_value_7.apply();
+          read_or_write_value_8.apply();
+
           transport_tbl.apply();
         }
       }

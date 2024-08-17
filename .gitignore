@@ -6,3 +6,5 @@
 .VSCodeCounter/
 **.pp.cpp
 **__pycache__/
+*.tofino
+*.bz2

@@ -41,10 +41,10 @@ header udp_t {
 }
 
 // Headers for Paxos
-#define PAXOS_1A 0 
-#define PAXOS_1B 1 
+#define PAXOS_1A 0
+#define PAXOS_1B 1
 #define PAXOS_2A 2
-#define PAXOS_2B 3 
+#define PAXOS_2B 3
 
 #define MSGTYPE_SIZE    16
 #define INSTANCE_SIZE   32
@@ -80,9 +80,7 @@ struct headers {
 }
 
 struct paxos_metadata_t {
-  bit<ROUND_SIZE> old_round;
   bit<1> set_drop;
-  bit<8> ack_count;
   bit<8> ack_acceptors;
 }
 

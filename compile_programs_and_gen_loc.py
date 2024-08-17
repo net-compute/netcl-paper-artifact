@@ -38,7 +38,7 @@ def create_p4_pp_loc_file(program, need_formatting=False):
     loc = {"P4": {"code": 0}}
 
     preprocessed = ""
-    if '-one-' in program:
+    if '--combined--' in program:
         for f in os.listdir(d):
             if f.endswith(".p4"):
                 fp = os.path.join(d, f)

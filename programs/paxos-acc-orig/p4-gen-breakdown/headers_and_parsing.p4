@@ -52,12 +52,17 @@ struct headers {
 	ipv4_h ip4;
 	udp_h udp;
 	ncp_h ncp;
+	_box_h<bit<32>>[1] ncp_data_1_0;
+	_box_h<bit<32>>[1] ncp_data_1_1;
+	_box_h<bit<16>>[1] ncp_data_1_2;
+	_box_h<bit<16>>[1] ncp_data_1_3;
+	_box_h<bit<8>>[1] ncp_data_1_4;
+	_box_h<bit<32>>[8] ncp_data_1_5;
 }
 parser NCPDataParser(packet_in P,
                      inout headers H,
                      in bit<8> Compute) {
 	bit<32> cnt = 0;
-	@ncvm("ncrt.ncp.parser.data.1:start")
 	state start {
 		transition _parse_data_1_0;
 	}
