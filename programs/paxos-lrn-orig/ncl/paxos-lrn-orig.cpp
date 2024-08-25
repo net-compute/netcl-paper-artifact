@@ -32,11 +32,10 @@ _at(LEARNERS) _kernel(PAXOS) void learner(msg_type &type, uint32_t &instance,
       Value[i][instance] = val[i];
 
     uint8_t votes;
-    if (round > prev_round) {
+    if (round > prev_round)
       votes = atomic_write(&VoteHistory[instance], vote);
-    } else {
+    else
       votes = atomic_or(&VoteHistory[instance], vote);
-    }
 
     if (!lookup(Majority, votes | vote))
       return _drop();

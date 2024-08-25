@@ -356,17 +356,17 @@ control ncl_compute(inout headers H,
 	apply {
 		ncvm_swi_tbl_key_0 = H.ncp_data_1_0[0].value;
 		switch (ncvm_swi_tbl_0.apply().action_run) {
-			ncvm_swi_tbl_0_action_1 : {
-				mem_rmw_0_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance(0);
-				_lv__0_ncvm_scf_pred_var_0 = 0;
-			}
+			ncvm_swi_tbl_0_action_default : { _lv__0_ncvm_scf_pred_var_0 = 0; }
 			ncvm_swi_tbl_0_action_0 : {
 				H.ncp_data_1_0[0].value = 4;
 				mem_rmw_o_0_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance(H.ncp_data_1_1[0].value, 0);
 				ncvm_action_multicast(M, 11);
 				_lv__0_ncvm_scf_pred_var_0 = 1;
 			}
-			ncvm_swi_tbl_0_action_default : { _lv__0_ncvm_scf_pred_var_0 = 0; }
+			ncvm_swi_tbl_0_action_1 : {
+				mem_rmw_0_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance(0);
+				_lv__0_ncvm_scf_pred_var_0 = 0;
+			}
 		}
 		if ((_lv__0_ncvm_scf_pred_var_0 == 0)) {
 			ncvm_action_drop(M);

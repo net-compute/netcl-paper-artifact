@@ -16,12 +16,15 @@ ext = {
 
 def count_loc(program, ver, ext, key):
     res = 0
-    d = os.path.join(os.path.abspath(INPUTS_DIR), program, ver)
-    for f in os.listdir(d):
-        if f.endswith(ext):
-            with open(os.path.join(d, f)) as lf:
-                j = json.load(lf)
-                res += j[key]["code"]
+    try:
+        d = os.path.join(os.path.abspath(INPUTS_DIR), program, ver)
+        for f in os.listdir(d):
+            if f.endswith(ext):
+                with open(os.path.join(d, f)) as lf:
+                    j = json.load(lf)
+                    res += j[key]["code"]
+    except:
+        pass
     return res
 
 

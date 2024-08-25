@@ -2,9 +2,9 @@ import os
 import sys
 import json
 import subprocess
-from util import remove_comments, cc
+from util import remove_comments, CC
 
-CC = "gcc"
+cc = CC['ncl']
 CLOC = "cloc"
 INPUTS_DIR = 'programs'
 NCLANG = os.path.abspath(os.environ['NCLANG']) if 'NCLANG' in os.environ else \
@@ -17,6 +17,8 @@ DEVNULL = open(os.devnull, 'wb', 0)
 
 def create_p4_loc_file(program):
     d = os.path.join(os.path.abspath(INPUTS_DIR), program, 'p4')
+    if not os.path.exists(d):
+        return
     loc = {"P4": {"code": 0}}
     for f in os.listdir(d):
         if f.endswith('p4'):
@@ -35,6 +37,8 @@ def create_p4_loc_file(program):
 
 def create_p4_pp_loc_file(program, need_formatting=False):
     d = os.path.join(os.path.abspath(INPUTS_DIR), program, 'p4')
+    if not os.path.exists(d):
+        return
     loc = {"P4": {"code": 0}}
 
     preprocessed = ""

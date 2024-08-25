@@ -3,7 +3,7 @@ import time
 import sys
 import shutil
 import subprocess
-from util import cc
+from util import CC
 
 INPUTS_DIR = 'programs'
 REPEAT=5
@@ -25,6 +25,7 @@ times = {}
 
 DEVNULL = open(os.devnull, 'wb', 0)
 
+cc = CC['ncl']
 for program in os.listdir(INPUTS_DIR):
     if program not in cc['ncc']['p4'].keys():
         continue
@@ -32,7 +33,7 @@ for program in os.listdir(INPUTS_DIR):
     d = os.path.join(os.path.abspath(INPUTS_DIR), program)
     n = os.path.join(d, 'ncl', "%s.cpp" % program)
     p = os.path.join(d, 'p4-gen', "%s.tmp.p4" % program)
-    t = os.path.join(d, "%s.tofino" % program)
+    t = os.path.join(d, 'p4-gen', "%s.tofino" % program)
 
     if CLEANUP:
         shutil.rmtree(t, ignore_errors=True)
@@ -42,7 +43,7 @@ for program in os.listdir(INPUTS_DIR):
     ncc_time = 0
 
     for i in range(REPEAT):
-        txt = "NetCL and P4" if P4C is not None else "NetCL"
+        txt = "NetCL and P4-Gen" if P4C is not None else "NetCL"
 
         print("[%s%s%s]" % ('=' * i, '>', ' ' * (REPEAT - (i + 1))), "timing %s compilation (%d/%d) of: %s" % (txt, i + 1,REPEAT, program), end='\r')
 
@@ -86,4 +87,56 @@ if not CLEANUP:
     print(fmt.format('ncc', *[("%.2f" % t) for t in ncc_times]))
     print(fmt.format('p4c', *[("  --" if P4C is None else ("%.2f" % t)) for t in p4c_times]))
     print(fmt.format('tot', *[("%.2f" % t) for t in tot_times]))
+    print(sep)
+
+
+cc = CC['p4']
+times = {}
+
+for program in os.listdir(INPUTS_DIR):
+    if program not in cc['dataplane']:
+        continue
+
+    times[program] = {"p4c": 0}
+    d = os.path.join(os.path.abspath(INPUTS_DIR), program)
+    p = os.path.join(d, 'p4-time', "main.p4")
+    t = os.path.join(d, 'p4-time', "%s.tofino" % program)
+
+    if CLEANUP:
+        shutil.rmtree(t, ignore_errors=True)
+        continue
+
+    if P4C is None:
+        continue
+
+    if not os.path.exists(p):
+        print(f" \033[31m\u2718\033[0m skipping p4c timing for '{program}': missing {p}")
+        continue
+    # t = os.path.join(d, "%s.tofino" % program)
+
+    for i in range(REPEAT):
+        print("[%s%s%s]" % ('=' * i, '>', ' ' * (REPEAT - (i + 1))), "timing P4 compilation (%d/%d) of: %s" % (i + 1, REPEAT, program), end='\r')
+        p4c_command = "%s %s %s -o %s" % (P4C, cc['dataplane'][program], p, t)
+        start = time.time()
+        subprocess.check_call([p4c_command], shell=True, stderr=DEVNULL, stdout=DEVNULL)
+        times[program]["p4c"] += time.time() - start
+
+    times[program]["p4c"] /= REPEAT
+    print()
+    if not KEEP:
+        shutil.rmtree(t, ignore_errors=True)
+
+if not CLEANUP and P4C is not None:
+    times = dict(sorted(times.items()))
+
+    sep = "+ --- + " + " + ".join('-' * max(5, len(t)) for t in times.keys()) + " +"
+    fmt = "| {:3} | " + " | ".join(["{:%d}" % max(5, (len(t))) for t in times.keys()]) + " |"
+
+    print(sep)
+    print(fmt.format("", *times.keys()))
+    print(sep)
+
+    p4c_times = [times[k]['p4c'] for k in times]
+
+    print(fmt.format('p4c', *[("%.2f" % t) for t in p4c_times]))
     print(sep)

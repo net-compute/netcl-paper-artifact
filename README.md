@@ -37,7 +37,7 @@ For questions please contact netcomputeproject@gmail.com or [open an issue](http
 ## Example Output (with Tofino SDE)
 ```
 [+] Preparing programs...
-[+] took 0m20s
+[+] took 0m22s
 
 [+] Generating Table 3...
 + ------------------------- + ---- + ------ + ---------- +      + ------ + ------ + ----------- +      + ------ +
@@ -49,46 +49,59 @@ For questions please contact netcomputeproject@gmail.com or [open an issue](http
 | cache-ours                | 91   | 723    | 7.95       |      | 82     | 697    | 7.66        |      | 965    |
 | calc-orig                 | 25   | 139    | 5.56       |      | 25     | 139    | 5.56        |      | 646    |
 | calc-ours                 | 25   | 234    | 9.36       |      | 25     | 234    | 9.36        |      | 646    |
-| paxos--combined--orig     | 76   | 381    | 5.01       |      | 70     | 743    | 9.78        |      | -      |
-| paxos--combined--ours     | 76   | 901    | 11.86      |      | 70     | 1441   | 18.96       |      | -      |
+| empty                     | -    | 0      | -          |      | -      | 0      | -           |      | 568    |
+| paxos--combined--orig     | 74   | 381    | 5.15       |      | 68     | 743    | 10.04       |      | -      |
+| paxos--combined--ours     | 74   | 901    | 12.18      |      | 68     | 1441   | 19.47       |      | -      |
 | paxos-acc-orig            | 38   | 230    | 6.05       |      | 34     | 208    | 5.47        |      | 746    |
 | paxos-acc-ours            | 38   | 573    | 15.08      |      | 34     | 550    | 14.47       |      | 746    |
 | paxos-ldr-orig            | 26   | 214    | 8.23       |      | 23     | 192    | 7.38        |      | 656    |
 | paxos-ldr-ours            | 26   | 276    | 10.62      |      | 23     | 253    | 9.73        |      | 656    |
-| paxos-lrn-orig            | 34   | 241    | 7.09       |      | 32     | 219    | 6.44        |      | 766    |
-| paxos-lrn-ours            | 35   | 436    | 12.46      |      | 33     | 413    | 11.80       |      | 774    |
+| paxos-lrn-orig            | 33   | 241    | 7.30       |      | 31     | 219    | 6.64        |      | 766    |
+| paxos-lrn-ours            | 33   | 436    | 13.21      |      | 31     | 413    | 12.52       |      | 766    |
 + ------------------------- + ---- + ------ + ---------- +      + ------ + ------ + ----------- +      + ------ +
 [+] took 0m0s
 
 [+] Generating Table 4...
-[====>] timing NetCL and P4 compilation (5/5) of: paxos-lrn-ours
-[====>] timing NetCL and P4 compilation (5/5) of: paxos-acc-ours
-[====>] timing NetCL and P4 compilation (5/5) of: paxos-ldr-orig
-[====>] timing NetCL and P4 compilation (5/5) of: paxos-lrn-orig
-[====>] timing NetCL and P4 compilation (5/5) of: paxos-ldr-ours
-[====>] timing NetCL and P4 compilation (5/5) of: cache-ours
-[====>] timing NetCL and P4 compilation (5/5) of: calc-orig
-[====>] timing NetCL and P4 compilation (5/5) of: cache-orig
-[====>] timing NetCL and P4 compilation (5/5) of: calc-ours
-[====>] timing NetCL and P4 compilation (5/5) of: agg-ours
-[====>] timing NetCL and P4 compilation (5/5) of: agg-orig
-[====>] timing NetCL and P4 compilation (5/5) of: paxos-acc-orig
-+ --- + -------- + -------- + ---------- + ---------- + --------- + --------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
-|     | agg-orig | agg-ours | cache-orig | cache-ours | calc-orig | calc-ours | paxos-acc-orig | paxos-acc-ours | paxos-ldr-orig | paxos-ldr-ours | paxos-lrn-orig | paxos-lrn-ours |
-+ --- + -------- + -------- + ---------- + ---------- + --------- + --------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
-| ncc | 0.73     | 0.73     | 0.74       | 0.74       | 0.71      | 0.70      | 0.71           | 0.70           | 0.70           | 0.69           | 0.71           | 0.73           |
-| p4c | 10.93    | 10.99    | 5.42       | 5.45       | 3.21      | 3.23      | 4.05           | 4.06           | 3.54           | 3.52           | 4.05           | 4.07           |
-| tot | 11.66    | 11.72    | 6.16       | 6.20       | 3.92      | 3.94      | 4.76           | 4.76           | 4.24           | 4.21           | 4.76           | 4.80           |
-+ --- + -------- + -------- + ---------- + ---------- + --------- + --------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
-[+] took 6m56s
+[====>] timing NetCL and P4-Gen compilation (5/5) of: paxos-lrn-ours
+[====>] timing NetCL and P4-Gen compilation (5/5) of: empty
+[====>] timing NetCL and P4-Gen compilation (5/5) of: paxos-acc-ours
+[====>] timing NetCL and P4-Gen compilation (5/5) of: paxos-ldr-orig
+[====>] timing NetCL and P4-Gen compilation (5/5) of: paxos-lrn-orig
+[====>] timing NetCL and P4-Gen compilation (5/5) of: paxos-ldr-ours
+[====>] timing NetCL and P4-Gen compilation (5/5) of: cache-ours
+[====>] timing NetCL and P4-Gen compilation (5/5) of: calc-orig
+[====>] timing NetCL and P4-Gen compilation (5/5) of: cache-orig
+[====>] timing NetCL and P4-Gen compilation (5/5) of: calc-ours
+[====>] timing NetCL and P4-Gen compilation (5/5) of: agg-ours
+[====>] timing NetCL and P4-Gen compilation (5/5) of: agg-orig
+[====>] timing NetCL and P4-Gen compilation (5/5) of: paxos-acc-orig
++ --- + -------- + -------- + ---------- + ---------- + --------- + --------- + ----- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
+|     | agg-orig | agg-ours | cache-orig | cache-ours | calc-orig | calc-ours | empty | paxos-acc-orig | paxos-acc-ours | paxos-ldr-orig | paxos-ldr-ours | paxos-lrn-orig | paxos-lrn-ours |
++ --- + -------- + -------- + ---------- + ---------- + --------- + --------- + ----- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
+| ncc | 0.73     | 0.72     | 0.73       | 0.73       | 0.71      | 0.69      | 0.70  | 0.71           | 0.70           | 0.71           | 0.69           | 0.69           | 0.70           |
+| p4c | 10.96    | 10.95    | 5.45       | 5.49       | 3.20      | 3.23      | 2.53  | 4.07           | 4.07           | 3.49           | 3.49           | 4.04           | 4.07           |
+| tot | 11.69    | 11.67    | 6.18       | 6.22       | 3.91      | 3.92      | 3.22  | 4.78           | 4.77           | 4.19           | 4.18           | 4.74           | 4.78           |
++ --- + -------- + -------- + ---------- + ---------- + --------- + --------- + ----- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
+[====>] timing P4 compilation (5/5) of: paxos-lrn-ours
+[====>] timing P4 compilation (5/5) of: paxos-acc-ours
+[====>] timing P4 compilation (5/5) of: paxos-ldr-ours
+[====>] timing P4 compilation (5/5) of: cache-ours
+[====>] timing P4 compilation (5/5) of: calc-ours
+[====>] timing P4 compilation (5/5) of: agg-ours
++ --- + -------- + ---------- + --------- + -------------- + -------------- + -------------- +
+|     | agg-ours | cache-ours | calc-ours | paxos-acc-ours | paxos-ldr-ours | paxos-lrn-ours |
++ --- + -------- + ---------- + --------- + -------------- + -------------- + -------------- +
+| p4c | 8.82     | 5.50       | 1.39      | 3.35           | 1.88           | 2.30           |
++ --- + -------- + ---------- + --------- + -------------- + -------------- + -------------- +
+[+] took 9m13s
 
 [+] Generating Table 6...
-+ ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
-|            | agg-orig   | agg-ours   | cache-orig | cache-ours | calc-orig  | calc-ours  | paxos-acc-orig | paxos-acc-ours | paxos-ldr-orig | paxos-ldr-ours | paxos-lrn-orig | paxos-lrn-ours |
-+ ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
-| IR Allocas | 0          | 0          | 0          | 0          | 1 / 8b     | 1 / 8b     | 0              | 0              | 1 / 8b         | 1 / 8b         | 1 / 8b         | 1 / 8b         |
-| P4 Locvars | 4 / 128b   | 4 / 128b   | 17 / 325b  | 17 / 325b  | 2 / 40b    | 2 / 40b    | 2 / 48b        | 2 / 48b        | 2 / 40b        | 2 / 40b        | 6 / 72b        | 7 / 80b        |
-+ ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
++ ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
+|            | agg-orig   | agg-ours   | cache-orig | cache-ours | calc-orig  | calc-ours  | empty      | paxos-acc-orig | paxos-acc-ours | paxos-ldr-orig | paxos-ldr-ours | paxos-lrn-orig | paxos-lrn-ours |
++ ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
+| IR Allocas | 0          | 0          | 0          | 0          | 1 / 8b     | 1 / 8b     | 0          | 0              | 0              | 1 / 8b         | 1 / 8b         | 1 / 8b         | 1 / 8b         |
+| P4 Locvars | 4 / 128b   | 4 / 128b   | 17 / 325b  | 17 / 325b  | 2 / 40b    | 2 / 40b    | 0          | 2 / 48b        | 2 / 48b        | 2 / 40b        | 2 / 40b        | 6 / 72b        | 6 / 72b        |
++ ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + ---------- + -------------- + -------------- + -------------- + -------------- + -------------- + -------------- +
 [+] took 0m0s
 
 [+] Generating Figure 12...
@@ -112,11 +125,42 @@ paxos-ldr-orig.G | 223             | 65     | 157     | 1         | 12          
 paxos-ldr-orig.H | 114             | 19     | 18      | 1         | 0               | 11    | 51    | 80      | 214   | 26   
 paxos-ldr-ours.G | 223             | 65     | 157     | 1         | 12              | 70    | 128   | 54      | 656   | 26   
 paxos-ldr-ours.H | 154             | 26     | 15      | 1         | 12              | 11    | 57    | 96      | 276   | 26   
-paxos-lrn-orig.G | 223             | 66     | 155     | 10        | 66              | 84    | 162   | 149     | 766   | 34   
-paxos-lrn-orig.H | 114             | 32     | 26      | 3         | 0               | 25    | 41    | 107     | 241   | 34   
+paxos-lrn-orig.G | 223             | 66     | 155     | 10        | 66              | 84    | 162   | 149     | 766   | 33   
+paxos-lrn-orig.H | 114             | 32     | 26      | 3         | 0               | 25    | 41    | 107     | 241   | 33   
+paxos-lrn-ours.G | 223             | 66     | 155     | 10        | 66              | 84    | 162   | 149     | 766   | 33   
+paxos-lrn-ours.H | 154             | 67     | 45      | 10        | 66              | 36    | 58    | 263     | 436   | 33   
+calc-orig.G      | 183             | 46     | 99      | 0         | 0               | 81    | 237   | 54      | 646   | 25   
+calc-orig.H      | 48              | 21     | 18      | 0         | 0               | 7     | 45    | 75      | 139   | 25   
 calc-ours.G      | 183             | 46     | 99      | 0         | 0               | 81    | 237   | 54      | 646   | 25   
 calc-ours.H      | 124             | 22     | 42      | 0         | 0               | 8     | 38    | 89      | 234   | 25   
-[+] took 0m6s
 
-Finished after 7m22s
+
+Program          | Headers+Parsing | Tables | Actions | Registers | RegisterActions | Logic | Other | Compute | Total   | NetCL
+-------------------------------------------------------------------------------------------------------------------------------
+agg-orig.G       | 18.03           | 4.58   | 16.41   | 2.54      | 35.21           | 9.79  | 13.45 | 50.70   | 1420  | 2.68 
+agg-orig.H       | 30.29           | 24.06  | 18.09   | 0.35      | 5.44            | 14.75 | 7.02  | 56.54   | 1139  | 3.34 
+agg-ours.G       | 18.03           | 4.58   | 16.41   | 2.54      | 35.21           | 9.79  | 13.45 | 50.70   | 1420  | 2.68 
+agg-ours.H       | 30.61           | 17.78  | 10.93   | 0.58      | 9.18            | 9.33  | 21.57 | 50.58   | 686   | 5.54 
+cache-orig.G     | 22.18           | 8.19   | 17.41   | 1.55      | 16.79           | 14.61 | 19.27 | 36.27   | 965   | 9.43 
+cache-ours.G     | 22.18           | 8.19   | 17.41   | 1.55      | 16.79           | 14.61 | 19.27 | 36.27   | 965   | 9.43 
+cache-ours.H     | 22.54           | 10.10  | 15.49   | 1.80      | 20.19           | 11.20 | 18.67 | 59.20   | 723   | 12.59
+paxos-acc-orig.G | 29.89           | 7.37   | 20.38   | 1.34      | 8.04            | 11.93 | 21.05 | 17.29   | 746   | 5.09 
+paxos-acc-orig.H | 52.17           | 11.30  | 11.74   | 1.74      | 0.00            | 6.09  | 16.96 | 41.74   | 230   | 16.52
+paxos-acc-ours.G | 29.89           | 7.37   | 20.38   | 1.34      | 8.04            | 11.93 | 21.05 | 17.29   | 746   | 5.09 
+paxos-acc-ours.H | 24.08           | 29.32  | 12.04   | 1.92      | 15.01           | 4.36  | 13.26 | 69.28   | 573   | 6.63 
+paxos-ldr-orig.G | 33.99           | 9.91   | 23.93   | 0.15      | 1.83            | 10.67 | 19.51 | 8.23    | 656   | 3.96 
+paxos-ldr-orig.H | 53.27           | 8.88   | 8.41    | 0.47      | 0.00            | 5.14  | 23.83 | 37.38   | 214   | 12.15
+paxos-ldr-ours.G | 33.99           | 9.91   | 23.93   | 0.15      | 1.83            | 10.67 | 19.51 | 8.23    | 656   | 3.96 
+paxos-ldr-ours.H | 55.80           | 9.42   | 5.43    | 0.36      | 4.35            | 3.99  | 20.65 | 34.78   | 276   | 9.42 
+paxos-lrn-orig.G | 29.11           | 8.62   | 20.23   | 1.31      | 8.62            | 10.97 | 21.15 | 19.45   | 766   | 4.31 
+paxos-lrn-orig.H | 47.30           | 13.28  | 10.79   | 1.24      | 0.00            | 10.37 | 17.01 | 44.40   | 241   | 13.69
+paxos-lrn-ours.G | 29.11           | 8.62   | 20.23   | 1.31      | 8.62            | 10.97 | 21.15 | 19.45   | 766   | 4.31 
+paxos-lrn-ours.H | 35.32           | 15.37  | 10.32   | 2.29      | 15.14           | 8.26  | 13.30 | 60.32   | 436   | 7.57 
+calc-orig.G      | 28.33           | 7.12   | 15.33   | 0.00      | 0.00            | 12.54 | 36.69 | 8.36    | 646   | 3.87 
+calc-orig.H      | 34.53           | 15.11  | 12.95   | 0.00      | 0.00            | 5.04  | 32.37 | 53.96   | 139   | 17.99
+calc-ours.G      | 28.33           | 7.12   | 15.33   | 0.00      | 0.00            | 12.54 | 36.69 | 8.36    | 646   | 3.87 
+calc-ours.H      | 52.99           | 9.40   | 17.95   | 0.00      | 0.00            | 3.42  | 16.24 | 38.03   | 234   | 10.68
+[+] took 0m26s
+
+Finished after 10m1s
 ```

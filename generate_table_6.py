@@ -1,8 +1,9 @@
 import os
 import sys
 import subprocess
-from util import cc
+from util import CC
 
+cc = CC['ncl']
 INPUTS_DIR = 'programs'
 NCLANG = os.path.abspath(os.environ['NCLANG']) if 'NCLANG' in os.environ else \
     os.path.join(os.path.abspath('~'), "nclang-0.1.0", "build", "bin", "nclang")
@@ -13,10 +14,10 @@ if not os.path.exists(NCLANG):
 
 ir_kernel_prefix = "define dso_local void"
 ir_kernels = {
-          "agg-orig": "@_Z9allreducejhtttRjPj",
-          "agg-ours": "@_Z9allreducejhtttRjPj",
-        "cache-orig": "@_Z5queryR4op_tmPjRjRbS2_b",
-        "cache-ours": "@_Z5queryR4op_tmPjRjRbS2_b",
+          "agg-orig": "@_Z9allreducehttjjRjPj",
+          "agg-ours": "@_Z9allreducehttjjRjPj",
+        "cache-orig": "@_Z5querymPjR4op_tRjRb",
+        "cache-ours": "@_Z5querymPjR4op_tRjRb",
          "calc-orig": "@_Z10calculator9operationjjRj",
          "calc-ours": "@_Z10calculator9operationjjRj",
     "paxos-acc-orig": "@_Z8acceptorR8msg_typeRjtRtRhPj",
@@ -35,26 +36,29 @@ def count_allocas(program, ll):
 
     num, bits = 0, 0
 
-    with open(ll, 'r') as f:
-        lines = f.read().splitlines()
-        prefix = ir_kernel_prefix + ' ' + ir_kernels[program]
-        for i in range(len(lines)):
-            if lines[i].startswith(prefix):
-                for l in lines[i:]:
-                    if l.startswith('}'):
-                        break
-                    toks = l.split()
-                    idx = toks.index('alloca') if 'alloca' in toks else -1
-                    if idx >= 0:
-                        if toks[idx + 1].startswith('i'):
-                            num += 1
-                            bits += intty[toks[idx + 1].split(',')[0]] if toks[idx + 1].endswith(',') else intty[toks[idx + 1]]
-                        elif toks[idx + 1].startswith('['):
-                            num += 1
-                            bits += int(toks[idx + 1].split('[')[1]) * intty[toks[idx + 3].split(']')[0]]
-                        else:
-                            print("cannot handle alloca:", l)
-                break
+    try:
+        with open(ll, 'r') as f:
+            lines = f.read().splitlines()
+            prefix = ir_kernel_prefix + ' ' + ir_kernels[program]
+            for i in range(len(lines)):
+                if lines[i].startswith(prefix):
+                    for l in lines[i:]:
+                        if l.startswith('}'):
+                            break
+                        toks = l.split()
+                        idx = toks.index('alloca') if 'alloca' in toks else -1
+                        if idx >= 0:
+                            if toks[idx + 1].startswith('i'):
+                                num += 1
+                                bits += intty[toks[idx + 1].split(',')[0]] if toks[idx + 1].endswith(',') else intty[toks[idx + 1]]
+                            elif toks[idx + 1].startswith('['):
+                                num += 1
+                                bits += int(toks[idx + 1].split('[')[1]) * intty[toks[idx + 3].split(']')[0]]
+                            else:
+                                print("cannot handle alloca:", l)
+                    break
+    except:
+        pass
     return num, bits
 
 

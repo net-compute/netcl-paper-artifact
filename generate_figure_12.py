@@ -6,14 +6,15 @@ import re
 import sys
 import json
 import subprocess
-from util import remove_comments, cc
+from util import remove_comments, CC
 
 INPUTS_DIR = 'programs'
 OUTFILE = "figure_12.pdf"
 DATA = {}
+cc = CC['ncl']
 
 PAPER_ORDER = ["agg-orig", "agg-ours", "cache-orig", "cache-ours", "paxos-acc-orig", "paxos-acc-ours", "paxos-ldr-orig",
-               "paxos-ldr-ours", "paxos-lrn-orig", "paxos-lrn-ours" "calc-orig", "calc-ours"]
+               "paxos-ldr-ours", "paxos-lrn-orig", "paxos-lrn-ours", "calc-orig", "calc-ours"]
 
 
 def get_breakdown(program, ncl_d, full_d, brkd_d, breakdown):
@@ -78,7 +79,7 @@ for program in sorted(os.listdir(INPUTS_DIR)):
         brkd_d = os.path.join(d, "p4-gen-breakdown")
         get_breakdown(program, ncl_d, full_d, brkd_d, breakdown['g'])
     else:
-        print(f" \033[31m\u2718\033[0m no p4--gen0breakdown for '{program}'")
+        print(f" \033[31m\u2718\033[0m no p4--gen-breakdown for '{program}'")
         breakdown['g'] = None
 
     DATA[program] = breakdown
@@ -217,18 +218,52 @@ for prog, metrics in DATA.items():
                 metrics[version]['ncl'],
             ])
 
-# Define column widths
+rows_percent = []
+for prog, metrics in DATA.items():
+    for version in ['g', 'h']:
+        if metrics[version]:
+            rows_percent.append([
+                prog + '.' + version.upper(),
+                (metrics[version]['headers_and_parsing'] / metrics[version]['total']) * 100,
+                (metrics[version]['tables'] / metrics[version]['total']) * 100,
+                (metrics[version]['actions'] / metrics[version]['total']) * 100,
+                (metrics[version]['regs'] / metrics[version]['total']) * 100,
+                (metrics[version]['regactions'] / metrics[version]['total']) * 100,
+                (metrics[version]['logic'] / metrics[version]['total']) * 100,
+                (metrics[version]['other'] / metrics[version]['total']) * 100,
+                (metrics[version]['compute'] / metrics[version]['total']) * 100,
+                metrics[version]['total'],
+                (metrics[version]['ncl'] / metrics[version]['total']) * 100
+            ])
+
 col_widths = [max(len(str(item)) for item in col)
               for col in zip(*([headers] + rows))]
-
-# Create a format string for each row
 format_str = ' | '.join('{{:<{}}}'.format(width) for width in col_widths)
-
 # Print the header
 print()
 print(format_str.format(*headers))
 print('-' * (sum(col_widths) + 3 * (len(headers) - 1)))
-
 # Print each row of data
 for row in rows:
     print(format_str.format(*row))
+
+
+# Print the header
+col_widths_percent = [
+    max(len(f"{item:.2f}") if isinstance(item, (int, float)) else len(str(item)) for item in col)
+    for col in zip(*([headers] + rows_percent))
+]
+format_str_percent = ' | '.join('{{:<{}}}'.format(width) for width in col_widths_percent)
+print()
+print()
+print(format_str_percent.format(*headers))
+print('-' * (sum(col_widths_percent) + 3 * (len(headers) - 1)))
+
+formatted_rows = [
+    format_str.format(*[f"{item:.2f}" if isinstance(item, (float)) else str(item) for item in row])
+    for row in rows_percent
+]
+
+for row in formatted_rows:
+    print(row)
+    #print(format_str_percent.format(*row))

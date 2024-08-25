@@ -25,11 +25,11 @@ echo "[+] took $((($endt - $startt) / 60))m$((($endt - $startt ) % 60))s"
 echo
 
 echo "[+] Generating Table 4..."
-startt=`date +%s`
-python3 -u generate_table_4.py --keep | tee table_4.txt
-endt=`date +%s`
-echo "[+] took $((($endt - $startt) / 60))m$((($endt - $startt ) % 60))s"
-echo
+# startt=`date +%s`
+# python3 -u generate_table_4.py --keep | tee table_4.txt
+# endt=`date +%s`
+# echo "[+] took $((($endt - $startt) / 60))m$((($endt - $startt ) % 60))s"
+# echo
 
 echo "[+] Generating Table 6..."
 startt=`date +%s`

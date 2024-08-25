@@ -25,21 +25,18 @@ _at(LEARNERS) _kernel(PAXOS) void learner(msg_type &type, uint32_t &instance,
   if (type == PAXOS_2B) {
     auto prev_round = atomic_max(&Round[instance], round);
 
-    uint8_t votes;
-
     if (round < prev_round)
       return _drop(); // lower round => drop
 
     for (auto i = 0; i < 8; ++i)
       Value[i][instance] = val[i];
 
+    uint8_t votes;
     if (round > prev_round)
       votes = atomic_write(&VoteHistory[instance], vote);
     else
       votes = atomic_or(&VoteHistory[instance], vote);
 
-    if (votes & vote)
-      return _drop();
     if (!lookup(Majority, votes | vote))
       return _drop();
   }

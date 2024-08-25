@@ -318,60 +318,60 @@ control ncl_compute(inout headers H,
                     inout metadata M,
                     in ingress_intrinsic_metadata_t IM) {
 	bit<8> _tmp__45_cond_in_in;
-	bool call_i_i61;
-	bit<1> _lv__6__2;
-	bool call_i43_i;
+	bit<1> _lv__7_spec_select74_i;
 	_box_h<bit<32>>[4] _lv__0_cms_i;
 	bit<16> _lv__1_cacheline = 0;
 	bit<32> _lv__2_bitmap = 0;
-	bit<32> _tmp__14_icmp_conv_0_sub;
-	bit<32> _tmp__18_icmp_conv_2_sub;
-	bit<32> _lv__5_spec_select73_i_3;
-	bool call_i47_i;
 	bit<32> call_i50_i;
-	bit<32> _tmp__16_icmp_conv_1_sub;
 	bit<32> _lv__3_spec_select73_i_1;
-	bit<32> _lv__4_spec_select73_i_2;
+	bit<32> _lv__5_spec_select73_i_3;
 	bit<32> _tmp__20_icmp_conv_3_sub;
-	bit<1> _lv__7_spec_select74_i;
-	Hash<bit<15>>(HashAlgorithm_t.CRC64) _hash_6_crc64_u15;
-	Hash<bit<14>>(HashAlgorithm_t.XOR16) _hash_3_xor16_u14;
-	Hash<bit<14>>(HashAlgorithm_t.CRC64) _hash_2_crc64_u14;
-	Hash<bit<15>>(HashAlgorithm_t.CRC32) _hash_5_crc32_u15;
+	bool call_i47_i;
+	bool call_i43_i;
+	bool call_i_i61;
+	bit<1> _lv__6__2;
+	bit<32> _tmp__16_icmp_conv_1_sub;
+	bit<32> _tmp__14_icmp_conv_0_sub;
+	bit<32> _lv__4_spec_select73_i_2;
+	bit<32> _tmp__18_icmp_conv_2_sub;
 	Hash<bit<14>>(HashAlgorithm_t.CRC16) _hash_0_crc16_u14;
+	Hash<bit<14>>(HashAlgorithm_t.CRC64) _hash_2_crc64_u14;
 	Hash<bit<14>>(HashAlgorithm_t.CRC32) _hash_1_crc32_u14;
 	Hash<bit<15>>(HashAlgorithm_t.XOR32) _hash_4_xor32_u15;
-	@name(".ncvm.mem.managed.b2")
-	Register<bit<8>, bit<16>>(32768) _mem_b2;
+	Hash<bit<15>>(HashAlgorithm_t.CRC32) _hash_5_crc32_u15;
+	Hash<bit<14>>(HashAlgorithm_t.XOR16) _hash_3_xor16_u14;
+	Hash<bit<15>>(HashAlgorithm_t.CRC64) _hash_6_crc64_u15;
+	@name(".ncvm.mem.managed.b1")
+	Register<bit<8>, bit<16>>(32768) _mem_b1;
+	@name(".ncvm.mem.managed.Stats1")
+	Register<bit<32>, bit<16>>(4096) _mem_Stats1;
+	@name(".ncvm.mem.managed.c3")
+	Register<bit<32>, bit<16>>(16384) _mem_c3;
+	@name(".ncvm.mem.managed.b0")
+	Register<bit<8>, bit<16>>(32768) _mem_b0;
+	@name(".ncvm.mem.managed.Stats0")
+	Register<bit<32>, bit<16>>(4096) _mem_Stats0;
 	@name(".ncvm.mem.net.Cache_fragment_2_")
 	@hidden
 	Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_2_;
-	@name(".ncvm.mem.managed.c3")
-	Register<bit<32>, bit<16>>(16384) _mem_c3;
-	@name(".ncvm.mem.net.Cache_fragment_1_")
-	@hidden
-	Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_1_;
 	@name(".ncvm.mem.net.Cache_fragment_3_")
 	@hidden
 	Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_3_;
 	@name(".ncvm.mem.managed.c2")
 	Register<bit<32>, bit<16>>(16384) _mem_c2;
-	@name(".ncvm.mem.managed.Stats0")
-	Register<bit<32>, bit<16>>(4096) _mem_Stats0;
-	@name(".ncvm.mem.managed.Valid0")
-	Register<bit<8>, bit<16>>(4096) _mem_Valid0;
-	@name(".ncvm.mem.managed.Stats1")
-	Register<bit<32>, bit<16>>(4096) _mem_Stats1;
-	@name(".ncvm.mem.managed.c1")
-	Register<bit<32>, bit<16>>(16384) _mem_c1;
-	@name(".ncvm.mem.managed.Valid1")
-	Register<bit<8>, bit<16>>(4096) _mem_Valid1;
+	@name(".ncvm.mem.net.Cache_fragment_1_")
+	@hidden
+	Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_1_;
+	@name(".ncvm.mem.managed.b2")
+	Register<bit<8>, bit<16>>(32768) _mem_b2;
 	@name(".ncvm.mem.managed.c0")
 	Register<bit<32>, bit<16>>(16384) _mem_c0;
-	@name(".ncvm.mem.managed.b0")
-	Register<bit<8>, bit<16>>(32768) _mem_b0;
-	@name(".ncvm.mem.managed.b1")
-	Register<bit<8>, bit<16>>(32768) _mem_b1;
+	@name(".ncvm.mem.managed.c1")
+	Register<bit<32>, bit<16>>(16384) _mem_c1;
+	@name(".ncvm.mem.managed.Valid0")
+	Register<bit<8>, bit<16>>(4096) _mem_Valid0;
+	@name(".ncvm.mem.managed.Valid1")
+	Register<bit<8>, bit<16>>(4096) _mem_Valid1;
 	@name(".ncvm.mem.net.Cache_fragment_0_")
 	@hidden
 	Register<bit<32>, bit<16>>(4096) _mem_Cache_fragment_0_;
@@ -424,10 +424,10 @@ control ncl_compute(inout headers H,
 		const default_action = ncvm_swi_tbl_0_action_default();
 		const size = 4;
 		const entries = {
-			3 : ncvm_swi_tbl_0_action_0;
-			7 : ncvm_swi_tbl_0_action_1;
-			5 : ncvm_swi_tbl_0_action_2;
-			1 : ncvm_swi_tbl_0_action_3;
+			5 : ncvm_swi_tbl_0_action_0;
+			3 : ncvm_swi_tbl_0_action_1;
+			1 : ncvm_swi_tbl_0_action_2;
+			7 : ncvm_swi_tbl_0_action_3;
 		}
 	}
 	RegisterAction<bit<8>, bit<16>, bool>(_mem_Valid0) __ra__ncvm_atomic_cond_write_bool_7_0_0_le_0_ = {
@@ -601,11 +601,8 @@ control ncl_compute(inout headers H,
 		if (_tmp__2_call_i21) {
 			ncvm_swi_tbl_key_0 = H.ncp_data_1_2[0].value;
 			switch (ncvm_swi_tbl_0.apply().action_run) {
-				ncvm_swi_tbl_0_action_0 : {
-					mem_rmw_10_mem_Valid0(_lv__1_cacheline);
-					mem_rmw_11_mem_Valid1(_lv__1_cacheline);
-				}
-				ncvm_swi_tbl_0_action_3 : {
+				ncvm_swi_tbl_0_action_default : { ncvm_action_drop(M); }
+				ncvm_swi_tbl_0_action_2 : {
 					if (((bool) _lv__2_bitmap[0:0]))
 						_tmp__45_cond_in_in = _mem_Valid0.read(_lv__1_cacheline);
 					else
@@ -623,12 +620,7 @@ control ncl_compute(inout headers H,
 						ncvm_action_reflect(M);
 					}
 				}
-				ncvm_swi_tbl_0_action_default : { ncvm_action_drop(M); }
-				ncvm_swi_tbl_0_action_2 : {
-					mem_rmw_8_mem_Valid0(_lv__1_cacheline);
-					mem_rmw_9_mem_Valid1(_lv__1_cacheline);
-				}
-				ncvm_swi_tbl_0_action_1 : {
+				ncvm_swi_tbl_0_action_3 : {
 					H.ncp_data_1_2[0].value = 8;
 					mem_rmw_0_mem_Valid0(_lv__1_cacheline);
 					mem_rmw_1_mem_Valid1(_lv__1_cacheline);
@@ -637,6 +629,14 @@ control ncl_compute(inout headers H,
 					mem_rmw_4_mem_Cache_fragment_2_(_lv__1_cacheline);
 					mem_rmw_5_mem_Cache_fragment_3_(_lv__1_cacheline);
 					ncvm_action_reflect(M);
+				}
+				ncvm_swi_tbl_0_action_1 : {
+					mem_rmw_10_mem_Valid0(_lv__1_cacheline);
+					mem_rmw_11_mem_Valid1(_lv__1_cacheline);
+				}
+				ncvm_swi_tbl_0_action_0 : {
+					mem_rmw_8_mem_Valid0(_lv__1_cacheline);
+					mem_rmw_9_mem_Valid1(_lv__1_cacheline);
 				}
 			}
 		}

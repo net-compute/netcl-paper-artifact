@@ -362,16 +362,16 @@ control ncl_compute(inout headers H,
 				ncvm_action_multicast(M, 11);
 				_lv__0_ncvm_scf_pred_var_0 = 1;
 			}
-			ncvm_swi_tbl_0_action_default : { _lv__0_ncvm_scf_pred_var_0 = 0; }
 			ncvm_swi_tbl_0_action_1 : {
 				mem_rmw_0_mem__ZZ6leaderR8msg_typeRjtRtRhPjE8Instance(0);
 				_lv__0_ncvm_scf_pred_var_0 = 0;
 			}
+			ncvm_swi_tbl_0_action_default : { _lv__0_ncvm_scf_pred_var_0 = 0; }
 		}
-		if ((_lv__0_ncvm_scf_pred_var_0 == 1)) { }
-		else {
+		if ((_lv__0_ncvm_scf_pred_var_0 == 0)) {
 			ncvm_action_drop(M);
 		}
+		else { }
 		return;
 	}
 }
